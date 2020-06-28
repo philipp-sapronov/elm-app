@@ -1,6 +1,8 @@
 var path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const NODE_ENV = process.env.NODE_ENV;
+const isDevMode = NODE_ENV === "development";
 const src = path.join(__dirname, "src");
 const elm = path.join(__dirname, "elm");
 
@@ -11,11 +13,13 @@ const ElmLoaders = (...loaders) =>
   }));
 
 module.exports = {
+  mode: NODE_ENV,
   entry: path.join(src, "index.js"),
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "[name].bundle.js",
   },
+  devtool: isDevMode ? "source-map" : false,
   module: {
     rules: [
       {
