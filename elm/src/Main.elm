@@ -6,7 +6,7 @@ import Html exposing (div)
 import Html.Attributes exposing (id)
 import Platform.Cmd as Cmd
 import Router exposing (parse)
-import Types exposing (..)
+import Types exposing (Msg(..), RootModel)
 import Url exposing (Url)
 
 
@@ -61,10 +61,10 @@ update msg model =
 
 view : RootModel -> Browser.Document Msg
 view { route } =
-    { title = "Hallo Page"
+    { title = "Elm app"
     , body =
         [ div [ id "root" ]
-            [ route.view route.params
+            [ route.view { params = route.params }
             ]
         ]
     }

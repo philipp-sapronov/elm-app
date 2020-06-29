@@ -19,13 +19,13 @@ type alias PageModel =
 type alias RootModel =
     { url : String
     , key : Browser.Navigation.Key
-    , route : RouteParams
+    , route : RouteProps
     }
 
 
-type alias RouteParams =
+type alias RouteProps =
     { key : String
     , path : String
-    , params : List String
-    , view : List String -> Html Msg
+    , params : List ( String, String )
+    , view : { params : List ( String, String ) } -> Html Msg
     }
