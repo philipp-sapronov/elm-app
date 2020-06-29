@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot --history-api-fallback --port 8080"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "keywords": [],
   "author": "",
