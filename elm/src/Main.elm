@@ -6,12 +6,8 @@ import Html exposing (div)
 import Html.Attributes exposing (id)
 import Platform.Cmd as Cmd
 import Router exposing (parse)
-import Types exposing (Msg(..), RootModel)
+import Types exposing (Flags, Msg(..), RootModel)
 import Url exposing (Url)
-
-
-type alias Flags =
-    ()
 
 
 handleUrlChange : Url -> Msg

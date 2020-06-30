@@ -5,6 +5,10 @@ import Html exposing (Html)
 import Url exposing (Url)
 
 
+type alias Flags =
+    ()
+
+
 type Msg
     = NoOp
     | UriChange Url
