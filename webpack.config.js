@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 const NODE_ENV = process.env.NODE_ENV;
 const isDevMode = NODE_ENV === "development";
 const src = path.join(__dirname, "src");
-const elm = path.join(__dirname, "elm");
+const elm = path.join(__dirname);
 
 const ElmLoaders = (...loaders) =>
   loaders.map((loader) => ({
