@@ -43,11 +43,7 @@ handleUrlRequest req =
 
 init : () -> Url -> Key -> ( Model, Cmd Msg )
 init _ url key =
-    let
-        _ =
-            Debug.log "WARNING" "UPDATED MAIN INIT"
-    in
-    ( { key = key, page = HomeModel store, store = { store | homeCounter = { value = 100 } } }, Cmd.none )
+    ( { key = key, page = HomeModel store, store = store }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

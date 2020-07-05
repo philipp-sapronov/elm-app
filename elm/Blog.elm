@@ -20,17 +20,17 @@ init store =
 update : Msg -> Store -> ( Store, Cmd Msg )
 update msg store =
     let
-        homeCounter =
-            store.homeCounter
+        blogCounter =
+            store.blogCounter
     in
     case msg of
         Increment ->
-            ( { store | homeCounter = { homeCounter | value = homeCounter.value + 1 } }
+            ( { store | blogCounter = { blogCounter | value = blogCounter.value + 1 } }
             , Cmd.none
             )
 
         Decrement ->
-            ( { store | homeCounter = { homeCounter | value = homeCounter.value - 1 } }
+            ( { store | blogCounter = { blogCounter | value = blogCounter.value - 1 } }
             , Cmd.none
             )
 
