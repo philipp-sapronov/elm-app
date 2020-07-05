@@ -1,35 +1,24 @@
 module Main exposing (main)
 
-import Blog as BlogPage exposing (..)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
-import Home as HomePage exposing (..)
-import Html exposing (Html)
-import NotFound as NotFoundPage exposing (..)
-import Platform.Cmd as Cmd
+import Page exposing (..)
 import Router exposing (Route(..))
-import Session exposing (Session)
 import Url exposing (Url)
+import Util exposing (mapCmd, mapHtml)
 
 
 type Msg
     = RouteChanged Url
-    | ExternalLink String
-    | HomeMsg HomePage.Msg
-    | BlogMsg BlogPage.Msg
-    | NotFoundMsg NotFoundPage.Msg
-    | Unit
+    | ExternalLink Url
+    | PageMsg Page.Msg
+    | NoOp
 
 
-type Model
-    = HomeModel HomePage.Model
-    | BlogModel BlogPage.Model
-    | NotFoundModel NotFoundPage.Model
-
-
-handleUrlChange : Url -> Msg
-handleUrlChange _ =
-    Unit
+type alias Model =
+    { key : Nav.Key
+    , page : Page.Model
+    }
 
 
 handleUrlRequest : UrlRequest -> Msg
@@ -38,97 +27,58 @@ handleUrlRequest req =
         Browser.Internal url ->
             RouteChanged url
 
-        Browser.External url ->
-            ExternalLink url
+        _ ->
+            NoOp
 
 
 init : () -> Url -> Key -> ( Model, Cmd Msg )
 init _ url key =
-    mapUrl url key
-
-
-mapUrl : Url -> Key -> ( Model, Cmd Msg )
-mapUrl url key =
     let
-        route =
-            Router.parse url
+        ( subModel, subCmd ) =
+            Page.init url
     in
-    case route of
-        Router.Home _ ->
-            HomePage.init (Session.Session key) |> mapUpdate HomeMsg HomeModel
-
-        Router.Blog _ ->
-            BlogPage.init (Session.Session key) |> mapUpdate BlogMsg BlogModel
-
-        _ ->
-            NotFoundPage.init (Session.Session key) |> mapUpdate NotFoundMsg NotFoundModel
-
-
-toSession : Model -> Nav.Key
-toSession page =
-    case page of
-        HomeModel model ->
-            HomePage.toSession model
-
-        BlogModel model ->
-            BlogPage.toSession model
-
-        NotFoundModel model ->
-            NotFoundPage.toSession model
+    ( { key = key, page = subModel }, Cmd.batch [ mapCmd PageMsg subCmd ] )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case ( msg, model ) of
-        ( RouteChanged url, _ ) ->
+    case msg of
+        RouteChanged url ->
             let
-                navKey =
-                    toSession model
-
                 ( subModel, subCmd ) =
-                    mapUrl url navKey
+                    Page.init url
             in
-            ( subModel, Cmd.batch [ subCmd, Nav.pushUrl navKey (Url.toString url) ] )
+            ( { model | page = subModel }
+            , Cmd.batch
+                [ Nav.pushUrl model.key (Url.toString url)
+                , mapCmd PageMsg subCmd
+                ]
+            )
 
-        ( HomeMsg message, HomeModel mdl ) ->
-            HomePage.update message mdl |> mapUpdate HomeMsg HomeModel
+        PageMsg pageMsg ->
+            let
+                ( subModel, subCmd ) =
+                    Page.update pageMsg model.page
+            in
+            ( { model | page = subModel }
+            , Cmd.batch
+                [ mapCmd PageMsg subCmd
+                ]
+            )
 
-        ( BlogMsg message, BlogModel mdl ) ->
-            BlogPage.update message mdl |> mapUpdate BlogMsg BlogModel
-
-        ( _, _ ) ->
+        _ ->
             ( model, Cmd.none )
-
-
-mapUpdate mainMsg mainModel ( subModel, subCmd ) =
-    ( mainModel subModel, mapCmd mainMsg subCmd )
-
-
-mapCmd msg cmd =
-    Cmd.map (\a -> msg a) cmd
-
-
-mapHtml msg html =
-    Html.map (\a -> msg a) html
 
 
 view : Model -> Browser.Document Msg
 view model =
-    case model of
-        HomeModel mdl ->
-            { title = "Home"
-            , body = [ mapHtml HomeMsg (HomePage.view mdl) ]
-            }
-
-        BlogModel mdl ->
-            { title = "Blog"
-            , body = [ mapHtml BlogMsg (BlogPage.view mdl) ]
-            }
-
-        NotFoundModel mdl ->
-            { title = "NotFound"
-            , body = [ mapHtml NotFoundMsg (NotFoundPage.view mdl) ]
-            }
+    let
+        ( title, html ) =
+            Page.view model.page
+    in
+    { title = title
+    , body = [ mapHtml PageMsg html ]
+    }
 
 
 main =
@@ -137,6 +87,6 @@ main =
         , update = update
         , view = view
         , subscriptions = \_ -> Sub.none
-        , onUrlChange = handleUrlChange
+        , onUrlChange = ExternalLink
         , onUrlRequest = handleUrlRequest
         }

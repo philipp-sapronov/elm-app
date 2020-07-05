@@ -1,15 +1,12 @@
 module Blog exposing (..)
 
-import Browser.Navigation as Nav exposing (Key)
-import Html exposing (Html, button, div, text)
-import Html.Attributes exposing (style)
+import Html exposing (Html, a, button, div, text)
+import Html.Attributes exposing (href, style)
 import Html.Events exposing (onClick)
-import Session exposing (Session)
 
 
 type alias Model =
     { cnt : Int
-    , session : Session
     }
 
 
@@ -19,17 +16,13 @@ type Msg
     | Unit
 
 
-init : Session -> ( Model, Cmd Msg )
-init session =
-    ( { cnt = 0, session = session }, Cmd.none )
+init : ( Model, Cmd Msg )
+init =
+    ( { cnt = 0 }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        _ =
-            Debug.log "msg" Debug.toString model
-    in
     case msg of
         Increment ->
             ( { model | cnt = model.cnt + 1 }
@@ -49,20 +42,9 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    let
-        _ =
-            Debug.log "view" Debug.toString model
-    in
-    div []
-        [ div [ style "display" "flex" ] []
-        , button [ onClick Decrement ] [ text "-" ]
+    div [ style "display" "flex" ]
+        [ button [ onClick Decrement ] [ text "-" ]
         , div [] [ text (String.fromInt model.cnt) ]
         , button [ onClick Increment ] [ text "+" ]
+        , a [ href "/" ] [ text "home" ]
         ]
-
-
-toSession : Model -> Nav.Key
-toSession { session } =
-    case session of
-        Session.Session key ->
-            key
