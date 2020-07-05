@@ -29,9 +29,6 @@ init url store =
     let
         route =
             Router.parse url
-
-        _ =
-            Debug.log "INIT" store
     in
     case route of
         Router.Home _ ->
@@ -48,14 +45,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case ( msg, model ) of
         ( HomeMsg message, HomeModel store ) ->
-            let
-                ( subMdl, cmd ) =
-                    HomePage.update message store |> mapUpdate HomeMsg HomeModel
-
-                _ =
-                    Debug.log ">>>>>>>>>>>>" subMdl
-            in
-            ( subMdl, cmd )
+            HomePage.update message store |> mapUpdate HomeMsg HomeModel
 
         ( BlogMsg message, BlogModel store ) ->
             BlogPage.update message store |> mapUpdate BlogMsg BlogModel

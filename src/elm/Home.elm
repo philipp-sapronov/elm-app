@@ -1,7 +1,7 @@
 module Home exposing (..)
 
 import Html exposing (Html, a, button, div, text)
-import Html.Attributes exposing (href, style)
+import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
 import Store exposing (Store)
 
@@ -42,7 +42,7 @@ update msg store =
 
 view : Store -> Html Msg
 view store =
-    div [ style "display" "flex" ]
+    div [ class "main" ]
         [ button [ onClick Decrement ] [ text "-" ]
         , div [] [ text (String.fromInt store.homeCounter.value) ]
         , button [ onClick Increment ] [ text "+" ]
