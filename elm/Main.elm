@@ -43,7 +43,11 @@ handleUrlRequest req =
 
 init : () -> Url -> Key -> ( Model, Cmd Msg )
 init _ url key =
-    ( { key = key, page = HomeModel store, store = store }, Cmd.none )
+    let
+        ( subModel, subCmd ) =
+            Page.init url store
+    in
+    ( { key = key, page = subModel, store = store }, Cmd.batch [ mapCmd PageMsg subCmd ] )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
