@@ -10,3 +10,8 @@ mapCmd msg cmd =
 
 mapHtml msg html =
     Html.map (\a -> msg a) html
+
+
+toModel : a -> Maybe a -> a
+toModel defaultModel model =
+    Maybe.withDefault defaultModel model

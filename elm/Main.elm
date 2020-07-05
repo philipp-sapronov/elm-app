@@ -4,6 +4,7 @@ import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
 import Page exposing (..)
 import Router exposing (Route(..))
+import Store exposing (Store, store)
 import Url exposing (Url)
 import Util exposing (mapCmd, mapHtml)
 
@@ -18,6 +19,7 @@ type Msg
 type alias Model =
     { key : Nav.Key
     , page : Page.Model
+    , store : Store
     }
 
 
@@ -31,13 +33,21 @@ handleUrlRequest req =
             NoOp
 
 
+
+{-
+   первый запуск приложения,
+   инициализация страницы с моделью по умолчанию
+   дальше будет обновление уже с состоянием из модели
+-}
+
+
 init : () -> Url -> Key -> ( Model, Cmd Msg )
 init _ url key =
     let
-        ( subModel, subCmd ) =
-            Page.init url
+        _ =
+            Debug.log "WARNING" "UPDATED MAIN INIT"
     in
-    ( { key = key, page = subModel }, Cmd.batch [ mapCmd PageMsg subCmd ] )
+    ( { key = key, page = HomeModel store, store = { store | homeCounter = { value = 100 } } }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -46,7 +56,7 @@ update msg model =
         RouteChanged url ->
             let
                 ( subModel, subCmd ) =
-                    Page.init url
+                    Page.init url model.store
             in
             ( { model | page = subModel }
             , Cmd.batch
@@ -60,7 +70,7 @@ update msg model =
                 ( subModel, subCmd ) =
                     Page.update pageMsg model.page
             in
-            ( { model | page = subModel }
+            ( { model | page = subModel, store = Page.toStore subModel }
             , Cmd.batch
                 [ mapCmd PageMsg subCmd
                 ]

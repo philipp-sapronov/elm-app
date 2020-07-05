@@ -3,11 +3,7 @@ module Blog exposing (..)
 import Html exposing (Html, a, button, div, text)
 import Html.Attributes exposing (href, style)
 import Html.Events exposing (onClick)
-
-
-type alias Model =
-    { cnt : Int
-    }
+import Store exposing (Store)
 
 
 type Msg
@@ -16,35 +12,39 @@ type Msg
     | Unit
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( { cnt = 0 }, Cmd.none )
+init : Store -> ( Store, Cmd Msg )
+init store =
+    ( store, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update : Msg -> Store -> ( Store, Cmd Msg )
+update msg store =
+    let
+        homeCounter =
+            store.homeCounter
+    in
     case msg of
         Increment ->
-            ( { model | cnt = model.cnt + 1 }
+            ( { store | homeCounter = { homeCounter | value = homeCounter.value + 1 } }
             , Cmd.none
             )
 
         Decrement ->
-            ( { model | cnt = model.cnt - 1 }
+            ( { store | homeCounter = { homeCounter | value = homeCounter.value - 1 } }
             , Cmd.none
             )
 
         _ ->
-            ( model
+            ( store
             , Cmd.none
             )
 
 
-view : Model -> Html Msg
-view model =
+view : Store -> Html Msg
+view store =
     div [ style "display" "flex" ]
         [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model.cnt) ]
+        , div [] [ text (String.fromInt store.blogCounter.value) ]
         , button [ onClick Increment ] [ text "+" ]
         , a [ href "/" ] [ text "home" ]
         ]

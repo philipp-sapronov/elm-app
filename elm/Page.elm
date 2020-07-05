@@ -6,6 +6,7 @@ import Html exposing (Html)
 import NotFound as NotFoundPage exposing (..)
 import Platform.Cmd as Cmd
 import Router exposing (Route(..))
+import Store exposing (Store)
 import Url exposing (Url)
 import Util exposing (mapCmd, mapHtml)
 
@@ -18,40 +19,46 @@ type Msg
 
 
 type Model
-    = HomeModel HomePage.Model
-    | BlogModel BlogPage.Model
-    | NotFoundModel NotFoundPage.Model
+    = HomeModel Store
+    | BlogModel Store
+    | NotFoundModel Store
 
 
-init : Url -> ( Model, Cmd Msg )
-init url =
+init : Url -> Store -> ( Model, Cmd Msg )
+init url store =
     let
         route =
             Router.parse url
+
+        _ =
+            Debug.log "INIT" store
     in
     case route of
         Router.Home _ ->
-            HomePage.init |> mapUpdate HomeMsg HomeModel
+            HomePage.init store |> mapUpdate HomeMsg HomeModel
 
         Router.Blog _ ->
-            BlogPage.init |> mapUpdate BlogMsg BlogModel
+            BlogPage.init store |> mapUpdate BlogMsg BlogModel
 
         _ ->
-            NotFoundPage.init |> mapUpdate NotFoundMsg NotFoundModel
+            NotFoundPage.init store |> mapUpdate NotFoundMsg NotFoundModel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        _ =
-            Debug.log "hallo" "world"
-    in
     case ( msg, model ) of
-        ( HomeMsg message, HomeModel mdl ) ->
-            HomePage.update message mdl |> mapUpdate HomeMsg HomeModel
+        ( HomeMsg message, HomeModel store ) ->
+            let
+                ( subMdl, cmd ) =
+                    HomePage.update message store |> mapUpdate HomeMsg HomeModel
 
-        ( BlogMsg message, BlogModel mdl ) ->
-            BlogPage.update message mdl |> mapUpdate BlogMsg BlogModel
+                _ =
+                    Debug.log ">>>>>>>>>>>>" subMdl
+            in
+            ( subMdl, cmd )
+
+        ( BlogMsg message, BlogModel store ) ->
+            BlogPage.update message store |> mapUpdate BlogMsg BlogModel
 
         ( _, _ ) ->
             ( model, Cmd.none )
@@ -61,14 +68,27 @@ mapUpdate mainMsg mainModel ( subModel, subCmd ) =
     ( mainModel subModel, mapCmd mainMsg subCmd )
 
 
+toStore : Model -> Store
+toStore model =
+    case model of
+        HomeModel store ->
+            store
+
+        BlogModel store ->
+            store
+
+        NotFoundModel store ->
+            store
+
+
 view : Model -> ( String, Html Msg )
 view model =
     case model of
-        HomeModel mdl ->
-            ( "Home", mapHtml HomeMsg (HomePage.view mdl) )
+        HomeModel store ->
+            ( "Home", mapHtml HomeMsg (HomePage.view store) )
 
-        BlogModel mdl ->
-            ( "Blog", mapHtml BlogMsg (BlogPage.view mdl) )
+        BlogModel store ->
+            ( "Blog", mapHtml BlogMsg (BlogPage.view store) )
 
-        NotFoundModel mdl ->
-            ( "NotFound", mapHtml NotFoundMsg (NotFoundPage.view mdl) )
+        NotFoundModel store ->
+            ( "NotFound", mapHtml NotFoundMsg (NotFoundPage.view store) )
