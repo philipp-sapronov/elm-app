@@ -1,4 +1,17 @@
+// theme
+@import "./Theme/fonts.scss";
+@import "./Theme/colors.scss";
+@import "./Theme/buttons.scss";
+
+// Pages
 @import "./Home/home.scss";
+
+// Layout
+@import "./Layout/header.scss";
+
+// Vies
+@import "./Views/buttons.scss";
+@import "./Views/logo.scss";
 
 body,
 p,

@@ -1,0 +1,29 @@
+$font-heading: "Merriweather", "Georgia", serif;
+$font-text: "Montserrat", sans-serif;
+
+@mixin font-heading($color, $size, $weight, $transform: none, $style: normal) {
+  color: $color;
+  font-family: $font-heading;
+  font-size: $size;
+  font-style: normal;
+  font-weight: $weight;
+  text-transform: $transform;
+}
+
+@mixin font-text($color, $size, $weight, $transform: none, $style: normal) {
+  color: $color;
+  font-family: $font-text;
+  font-size: $size;
+  font-style: normal;
+  font-weight: $weight;
+  text-transform: $transform;
+}
+
+@mixin font-button($color, $size) {
+  color: $color;
+  font-family: $font-text;
+  font-size: $size;
+  font-style: normal;
+  font-weight: 300;
+  text-transform: uppercase;
+}

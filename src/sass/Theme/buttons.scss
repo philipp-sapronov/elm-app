@@ -1,0 +1,23 @@
+@mixin button-ghost-sm($color, $height: 20px, $width: 100px) {
+  background-color: transparent;
+  border: 1px solid $color;
+  height: $height;
+  width: $width;
+  @include font-button($color, 12px);
+}
+
+@mixin button-ghost-md($color, $height: 30px, $width: 100px) {
+  background-color: transparent;
+  border: 1px solid $color;
+  height: $height;
+  width: $width;
+  @include font-button($color, 14px);
+}
+
+@mixin button-ghost-lg($color, $height: 40px, $width: 100px) {
+  background-color: transparent;
+  border: 1px solid $color;
+  height: $height;
+  width: $width;
+  @include font-button($color, 16px);
+}
