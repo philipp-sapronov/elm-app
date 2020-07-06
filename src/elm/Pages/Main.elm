@@ -1,14 +1,15 @@
-module Page exposing (..)
+module Pages.Main exposing (..)
 
-import Blog as BlogPage exposing (..)
-import Home as HomePage exposing (..)
 import Html exposing (Html)
-import NotFound as NotFoundPage exposing (..)
+import Layout.Main as Layout exposing (..)
+import Pages.Blog as BlogPage exposing (..)
+import Pages.Home as HomePage exposing (..)
+import Pages.NotFound as NotFoundPage exposing (..)
 import Platform.Cmd as Cmd
-import Router exposing (Route(..))
-import Store exposing (Store)
+import Router.Main as Router
+import Store.Main exposing (Store)
 import Url exposing (Url)
-import Util exposing (mapCmd, mapHtml)
+import Util.Main exposing (mapCmd, mapHtml)
 
 
 type Msg
@@ -71,14 +72,29 @@ toStore model =
             store
 
 
+toTitle : Model -> String
+toTitle model =
+    case model of
+        HomeModel _ ->
+            "Home"
+
+        BlogModel _ ->
+            "Blog"
+
+        NotFoundModel _ ->
+            "NotFound"
+
+
 view : Model -> ( String, Html Msg )
 view model =
-    case model of
+    ( toTitle model
+    , case model of
         HomeModel store ->
-            ( "Home", mapHtml HomeMsg (HomePage.view store) )
+            mapHtml HomeMsg <| Layout.view <| HomePage.view store
 
         BlogModel store ->
-            ( "Blog", mapHtml BlogMsg (BlogPage.view store) )
+            mapHtml BlogMsg <| Layout.view <| BlogPage.view store
 
         NotFoundModel store ->
-            ( "NotFound", mapHtml NotFoundMsg (NotFoundPage.view store) )
+            mapHtml NotFoundMsg <| Layout.view <| NotFoundPage.view store
+    )

@@ -1,4 +1,4 @@
-module Store exposing (..)
+module Store.Main exposing (..)
 
 
 type alias Counter =

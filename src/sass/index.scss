@@ -1,8 +1,13 @@
-.main {
-  width: 100vw;
-  height: 100vh;
-  background-color: blue;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@import "./Home/home.scss";
+
+body,
+p,
+span {
+  font-family: "Merriweather", "Georgia", serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Montserrat", sans-serif;
 }

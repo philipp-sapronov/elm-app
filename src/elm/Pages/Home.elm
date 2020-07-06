@@ -1,9 +1,9 @@
-module Blog exposing (..)
+module Pages.Home exposing (..)
 
 import Html exposing (Html, a, button, div, text)
-import Html.Attributes exposing (href, style)
+import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
-import Store exposing (Store)
+import Store.Main exposing (Store)
 
 
 type Msg
@@ -20,17 +20,17 @@ init store =
 update : Msg -> Store -> ( Store, Cmd Msg )
 update msg store =
     let
-        blogCounter =
-            store.blogCounter
+        homeCounter =
+            store.homeCounter
     in
     case msg of
         Increment ->
-            ( { store | blogCounter = { blogCounter | value = blogCounter.value + 1 } }
+            ( { store | homeCounter = { homeCounter | value = homeCounter.value + 1 } }
             , Cmd.none
             )
 
         Decrement ->
-            ( { store | blogCounter = { blogCounter | value = blogCounter.value - 1 } }
+            ( { store | homeCounter = { homeCounter | value = homeCounter.value - 1 } }
             , Cmd.none
             )
 
@@ -42,9 +42,9 @@ update msg store =
 
 view : Store -> Html Msg
 view store =
-    div [ style "display" "flex" ]
+    div [ class "wrapper" ]
         [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt store.blogCounter.value) ]
+        , div [] [ text (String.fromInt store.homeCounter.value) ]
         , button [ onClick Increment ] [ text "+" ]
-        , a [ href "/" ] [ text "home" ]
+        , a [ href "/blog" ] [ text "blog" ]
         ]

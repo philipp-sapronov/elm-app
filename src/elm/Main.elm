@@ -1,24 +1,23 @@
 module Main exposing (main)
 
 import Browser exposing (UrlRequest)
-import Browser.Navigation as Nav exposing (Key)
-import Page exposing (..)
-import Router exposing (Route(..))
-import Store exposing (Store, store)
+import Browser.Navigation as Nav
+import Pages.Main as Pages exposing (..)
+import Store.Main exposing (Store, store)
 import Url exposing (Url)
-import Util exposing (mapCmd, mapHtml)
+import Util.Main exposing (mapCmd, mapHtml)
 
 
 type Msg
     = RouteChanged Url
     | ExternalLink Url
-    | PageMsg Page.Msg
+    | PageMsg Pages.Msg
     | NoOp
 
 
 type alias Model =
     { key : Nav.Key
-    , page : Page.Model
+    , page : Pages.Model
     , store : Store
     }
 
@@ -33,11 +32,11 @@ handleUrlRequest req =
             NoOp
 
 
-init : () -> Url -> Key -> ( Model, Cmd Msg )
+init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     let
         ( subModel, subCmd ) =
-            Page.init url store
+            Pages.init url store
     in
     ( { key = key, page = subModel, store = store }, Cmd.batch [ mapCmd PageMsg subCmd ] )
 
@@ -48,7 +47,7 @@ update msg model =
         RouteChanged url ->
             let
                 ( subModel, subCmd ) =
-                    Page.init url model.store
+                    Pages.init url model.store
             in
             ( { model | page = subModel }
             , Cmd.batch
@@ -60,9 +59,9 @@ update msg model =
         PageMsg pageMsg ->
             let
                 ( subModel, subCmd ) =
-                    Page.update pageMsg model.page
+                    Pages.update pageMsg model.page
             in
-            ( { model | page = subModel, store = Page.toStore subModel }
+            ( { model | page = subModel, store = Pages.toStore subModel }
             , Cmd.batch
                 [ mapCmd PageMsg subCmd
                 ]
@@ -76,7 +75,7 @@ view : Model -> Browser.Document Msg
 view model =
     let
         ( title, html ) =
-            Page.view model.page
+            Pages.view model.page
     in
     { title = title
     , body = [ mapHtml PageMsg html ]

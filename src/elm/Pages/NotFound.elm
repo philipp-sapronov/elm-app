@@ -1,8 +1,8 @@
-module NotFound exposing (..)
+module Pages.NotFound exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (href)
-import Store exposing (Store)
+import Store.Main exposing (Store)
 
 
 type Msg

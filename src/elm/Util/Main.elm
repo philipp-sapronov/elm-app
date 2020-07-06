@@ -1,4 +1,4 @@
-module Util exposing (..)
+module Util.Main exposing (..)
 
 import Html
 import Platform.Cmd as Cmd
