@@ -40,11 +40,12 @@ update msg store =
             )
 
 
-view : Store -> Html Msg
-view store =
+view : Html Msg
+view =
     div [ class "wrapper" ]
         [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt store.homeCounter.value) ]
+
+        -- , div [] [ text (String.fromInt store.homeCounter.value) ]
         , button [ onClick Increment ] [ text "+" ]
         , a [ href "/blog" ] [ text "blog" ]
         ]

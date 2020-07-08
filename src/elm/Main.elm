@@ -15,21 +15,22 @@ type Msg
     | NoOp
 
 
+view : Model -> Browser.Document Msg
+view model =
+    let
+        ( title, html ) =
+            Pages.view model.page
+    in
+    { title = title
+    , body = [ mapHtml PageMsg html ]
+    }
+
+
 type alias Model =
     { key : Nav.Key
     , page : Pages.Model
     , store : Store
     }
-
-
-handleUrlRequest : UrlRequest -> Msg
-handleUrlRequest req =
-    case req of
-        Browser.Internal url ->
-            RouteChanged url
-
-        _ ->
-            NoOp
 
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -71,17 +72,6 @@ update msg model =
             ( model, Cmd.none )
 
 
-view : Model -> Browser.Document Msg
-view model =
-    let
-        ( title, html ) =
-            Pages.view model.page
-    in
-    { title = title
-    , body = [ mapHtml PageMsg html ]
-    }
-
-
 main =
     Browser.application
         { init = init
@@ -91,3 +81,13 @@ main =
         , onUrlChange = ExternalLink
         , onUrlRequest = handleUrlRequest
         }
+
+
+handleUrlRequest : UrlRequest -> Msg
+handleUrlRequest req =
+    case req of
+        Browser.Internal url ->
+            RouteChanged url
+
+        _ ->
+            NoOp

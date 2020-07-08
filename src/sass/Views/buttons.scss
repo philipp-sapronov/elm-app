@@ -1,7 +1,7 @@
 .menu-btn {
   width: 100px;
   @include font-button(black, 16px);
-  @include button-ghost-sm(black);
+  @include button-ghost-md(black);
 }
 
 .search-btn {
