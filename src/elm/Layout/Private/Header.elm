@@ -1,4 +1,4 @@
-module Layout.Header exposing (..)
+module Layout.Private.Header exposing (..)
 
 import Html exposing (Html, div, header)
 import Html.Attributes exposing (attribute, class)

@@ -1,9 +1,9 @@
-module Layout.Private exposing (..)
+module Layout.Public.Main exposing (..)
 
 import Html exposing (Html, div)
-import Layout.Header as Header exposing (..)
+import Layout.Public.Header as Header exposing (..)
 import Router.Main exposing (Route(..))
-import Util.Main exposing (mapHtml2)
+import Util.Main exposing (mapHtml, wrapMsg)
 
 
 type Msg
@@ -15,9 +15,9 @@ type Msg
 view : (Msg -> msg) -> Html msg -> Html msg
 view toMsg content =
     div []
-        [ mapHtml2 toMsg HeaderMsg Header.view
+        [ mapHtml (wrapMsg toMsg HeaderMsg) Header.view
         , content
-        , mapHtml2 toMsg FooterMsg footerView
+        , mapHtml (wrapMsg toMsg FooterMsg) footerView
         ]
 
 

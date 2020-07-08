@@ -1,7 +1,7 @@
 module Pages.Main exposing (..)
 
 import Html exposing (Html)
-import Layout.Private as Layout exposing (..)
+import Layout.Main as Layout exposing (..)
 import Pages.Blog as BlogPage exposing (..)
 import Pages.Home as HomePage exposing (..)
 import Pages.NotFound as NotFoundPage exposing (..)
@@ -9,7 +9,7 @@ import Platform.Cmd as Cmd
 import Router.Main as Router
 import Store.Main exposing (Store)
 import Url exposing (Url)
-import Util.Main exposing (mapCmd, mapHtml, wrapMsg)
+import Util.Main exposing (mapHtml, mapUpdate, wrapMsg)
 
 
 type PagesMsg
@@ -17,7 +17,6 @@ type PagesMsg
     | BlogMsg BlogPage.Msg
     | NotFoundMsg NotFoundPage.Msg
     | LayoutMsg Layout.Msg
-    | NoOp
 
 
 type Msg
@@ -31,12 +30,17 @@ view model =
             toTitle model
 
         layoutView =
-            Layout.view (wrapMsg Msg LayoutMsg)
+            case model of
+                NotFoundModel _ ->
+                    Layout.publicView wrappedLayoutMsg
+
+                _ ->
+                    Layout.privateView wrappedLayoutMsg
 
         pageView =
             case model of
                 HomeModel _ ->
-                    mapHtml (wrapMsg Msg HomeMsg) HomePage.view
+                    mapHtml wrappedHomeMsg HomePage.view
 
                 _ ->
                     Html.text ""
@@ -58,41 +62,29 @@ init url store =
     in
     case route of
         Router.Home _ ->
-            HomePage.init store |> mapUpdate (wrapMsg Msg HomeMsg) HomeModel
+            HomePage.init store |> mapUpdate wrappedHomeMsg HomeModel
 
         Router.Blog _ ->
-            BlogPage.init store |> mapUpdate (wrapMsg Msg BlogMsg) BlogModel
+            BlogPage.init store |> mapUpdate wrappedBlogMsg BlogModel
 
         _ ->
-            NotFoundPage.init store |> mapUpdate (wrapMsg Msg NotFoundMsg) NotFoundModel
+            NotFoundPage.init store |> mapUpdate wrappedNotFoundMsg NotFoundModel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update (Msg msg) model =
     case ( msg, model ) of
         ( LayoutMsg mmm, _ ) ->
-            let
-                _ =
-                    Debug.log "update" mmm
-            in
             ( model, Cmd.none )
 
-        ( HomeMsg message, HomeModel store ) ->
-            let
-                _ =
-                    Debug.log "123" "31"
-            in
-            HomePage.update message store |> mapUpdate (wrapMsg Msg HomeMsg) HomeModel
+        ( HomeMsg homeMsg, HomeModel store ) ->
+            HomePage.update homeMsg store |> mapUpdate wrappedHomeMsg HomeModel
 
-        ( BlogMsg message, BlogModel store ) ->
-            BlogPage.update message store |> mapUpdate (wrapMsg Msg BlogMsg) BlogModel
+        ( BlogMsg blogMsg, BlogModel store ) ->
+            BlogPage.update blogMsg store |> mapUpdate wrappedBlogMsg BlogModel
 
         ( _, _ ) ->
             ( model, Cmd.none )
-
-
-mapUpdate mainMsg mainModel ( subModel, subCmd ) =
-    ( mainModel subModel, mapCmd mainMsg subCmd )
 
 
 toStore : Model -> Store
@@ -118,4 +110,20 @@ toTitle model =
             "Blog"
 
         NotFoundModel _ ->
-            "NotFound"
+            "404"
+
+
+wrappedHomeMsg =
+    wrapMsg Msg HomeMsg
+
+
+wrappedBlogMsg =
+    wrapMsg Msg BlogMsg
+
+
+wrappedNotFoundMsg =
+    wrapMsg Msg NotFoundMsg
+
+
+wrappedLayoutMsg =
+    wrapMsg Msg LayoutMsg
