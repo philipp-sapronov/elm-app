@@ -1,9 +1,9 @@
-module Layout.Public.Header exposing (..)
+module Layouts.Public.Header exposing (..)
 
 import Html exposing (Html, div, header)
 import Html.Attributes exposing (attribute, class)
 import Html.Events exposing (onClick)
-import Util.Main exposing (mapHtml)
+import Utils.Main exposing (mapHtml)
 import Views.Buttons exposing (menuButton, searchButton)
 import Views.Icons exposing (icon)
 import Views.Logo exposing (logo)

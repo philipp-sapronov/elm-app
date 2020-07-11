@@ -1,7 +1,15 @@
-module Router.Main exposing (Route(..), parse)
+module Router exposing (Route(..), parse)
 
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser, map, oneOf, top)
+
+
+
+{-
+   Router
+   should:
+   1. manage routes
+-}
 
 
 type Route

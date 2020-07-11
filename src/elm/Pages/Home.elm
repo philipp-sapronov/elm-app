@@ -14,10 +14,6 @@ type Msg
 
 view : Model -> Html Msg
 view model =
-    let
-        _ =
-            Debug.log "view" model.title
-    in
     div [ class "wrapper" ]
         [ button [ onClick NoOp ] [ text "-" ]
         , div [] [ text model.text ]
@@ -51,10 +47,6 @@ update : Msg -> Model -> State -> ( Model, State, Cmd Msg )
 update msg model state =
     case msg of
         ChangeTitle ->
-            let
-                _ =
-                    Debug.log "change title" "1"
-            in
             ( toModel model state
             , state
             , Cmd.none
@@ -67,9 +59,6 @@ update msg model state =
 
                 newModel =
                     toModel model newState
-
-                _ =
-                    Debug.log "Home" ( value, model )
             in
             ( { newModel | value = value }
             , newState

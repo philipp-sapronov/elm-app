@@ -1,4 +1,4 @@
-module Session.Main exposing (..)
+module Session exposing (..)
 
 import Html exposing (Html)
 

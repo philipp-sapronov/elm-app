@@ -1,9 +1,9 @@
-module Layout.Public.Main exposing (..)
+module Layouts.Public.Main exposing (..)
 
 import Html exposing (Html, div)
-import Layout.Public.Header as Header exposing (..)
-import Router.Main exposing (Route(..))
-import Util.Main exposing (mapHtml, wrapMsg)
+import Layouts.Public.Header as Header exposing (..)
+import Router exposing (Route(..))
+import Utils.Main exposing (mapHtml, wrapMsg)
 
 
 type Msg
@@ -12,13 +12,18 @@ type Msg
     | FooterMsg String
 
 
-view : (Msg -> msg) -> Html msg -> Html msg
-view toMsg content =
+view : (Msg -> msg) -> Model -> Html msg -> Html msg
+view toMsg model content =
     div []
         [ mapHtml (wrapMsg toMsg HeaderMsg) Header.view
         , content
         , mapHtml (wrapMsg toMsg FooterMsg) footerView
         ]
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( { title = "public" }, Cmd.none )
 
 
 type alias Model =

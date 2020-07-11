@@ -4,11 +4,11 @@ import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Html
 import Html.Attributes as Attrs
-import Pages.Main as Pages
-import Session.Main as Session exposing (Session)
+import Page as Page
+import Session as Session exposing (Session)
 import Store.Main as Store exposing (..)
 import Url exposing (Url)
-import Util.Main exposing (mapHtml)
+import Utils.Main exposing (mapHtml)
 
 
 
@@ -25,8 +25,7 @@ type Msg
     = LinkClicked UrlRequest
     | UrlChanged Url
     | SessionMsg Session.Msg
-    | PagesMsg Pages.Msg
-    | NoOp
+    | PageMsg Page.Msg
 
 
 main =
@@ -44,17 +43,17 @@ view : Model -> Browser.Document Msg
 view { page } =
     let
         ( title, html ) =
-            Pages.view page
+            Page.view page
     in
     { title = title
-    , body = [ Html.div [ Attrs.id "root" ] [ mapHtml PagesMsg html ] ]
+    , body = [ Html.div [ Attrs.id "root" ] [ mapHtml PageMsg html ] ]
     }
 
 
 type alias Model =
     { key : Nav.Key
     , session : Session
-    , page : Pages.Model
+    , page : Page.Model
     , state : State
     , url : Url
     }
@@ -64,7 +63,7 @@ init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     let
         ( pageModel, pageCmd ) =
-            Pages.init url
+            Page.init url
     in
     ( { key = key
       , page = pageModel
@@ -72,7 +71,7 @@ init _ url key =
       , state = state
       , url = url
       }
-    , Cmd.batch [ Cmd.map PagesMsg pageCmd ]
+    , Cmd.batch [ Cmd.map PageMsg pageCmd ]
     )
 
 
@@ -92,22 +91,19 @@ update msg ({ key, page, state, session } as model) =
         UrlChanged url ->
             let
                 ( pageModel, pageCmd ) =
-                    Pages.init url
+                    Page.init url
             in
-            ( { model | page = pageModel }, Cmd.map PagesMsg pageCmd )
+            ( { model | page = pageModel }, Cmd.map PageMsg pageCmd )
 
         -- can change url
-        PagesMsg pageMsg ->
+        PageMsg pageMsg ->
             -- can change page and state
             let
                 ( pageModel, newState, pageCmd ) =
-                    Pages.update pageMsg page state session
+                    Page.update pageMsg page state session
             in
-            ( { model | page = pageModel, state = newState }, Cmd.map PagesMsg pageCmd )
+            ( { model | page = pageModel, state = newState }, Cmd.map PageMsg pageCmd )
 
         SessionMsg _ ->
             -- can change session
-            ( model, Cmd.none )
-
-        _ ->
             ( model, Cmd.none )
