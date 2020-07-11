@@ -38,4 +38,4 @@ update msg model =
 
 footerView : Html msg
 footerView =
-    Html.footer [] [ Html.text "footer" ]
+    Html.footer [] [ Html.text "private footer" ]

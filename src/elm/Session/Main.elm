@@ -1,40 +1,64 @@
-module Main exposing (main)
+module Session.Main exposing (..)
 
-import Browser exposing (UrlRequest)
-import Browser.Navigation as Nav
-import Pages.Main as Pages exposing (..)
-import Store.Main exposing (Store, store)
-import Url exposing (Url)
-import Util.Main exposing (mapCmd, mapHtml)
+import Html exposing (Html)
+
+
+
+-- import Store.Main exposing (Store, store)
+{-
+   Session
+-}
 
 
 type Msg
-    = PageMsg Pages.Msg
-    | NoOp
+    = NoOp
 
 
-view : Model -> ( Model, Html msg )
+
+{-
+   VIEW should
+   1: If user is authorezied return Just User
+   2: If user doesn't authorized return Nothing
+-}
+
+
+view : Session -> Maybe User
 view model =
-    Pages.view model.page
+    case model of
+        Auth user ->
+            Just mockUser
+
+        Guest ->
+            Nothing
 
 
-type alias Model =
-    { page : Pages.Model
-    , store : Store
+type Session
+    = Auth User
+    | Guest
+
+
+
+{-
+   UPDATE should:
+   1: Manage user data
+   2: Get message and return authorization state
+   3: Return cmd with getting authorization state
+-}
+
+
+update : Msg -> Session -> ( Session, Cmd msg )
+update msg model =
+    ( model, Cmd.none )
+
+
+mockUser : User
+mockUser =
+    { uid = "xxx-yyy-zzz"
+    , email = "user@email.com"
     }
 
 
-init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
-    let
-        ( subModel, subCmd ) =
-            Pages.init url store
-    in
-    ( { key = key, page = subModel, store = store }, Cmd.batch [ mapCmd PageMsg subCmd ] )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        _ ->
-            ( model, Cmd.none )
+type alias User =
+    { uid : String
+    , email : String
+    }

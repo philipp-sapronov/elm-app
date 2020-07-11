@@ -1,51 +1,96 @@
 module Pages.Home exposing (..)
 
-import Html exposing (Html, a, button, div, text)
-import Html.Attributes exposing (class, href)
-import Html.Events exposing (onClick)
-import Store.Main exposing (Store)
+import Html exposing (Html, a, button, div, input, text)
+import Html.Attributes exposing (class, href, value)
+import Html.Events exposing (onClick, onInput)
+import Store.Main as Store exposing (State, dispatch)
 
 
 type Msg
-    = Increment
-    | Decrement
-    | Unit
+    = NoOp
+    | Input String
+    | ChangeTitle
 
 
-init : Store -> ( Store, Cmd Msg )
-init store =
-    ( store, Cmd.none )
-
-
-update : Msg -> Store -> ( Store, Cmd Msg )
-update msg store =
+view : Model -> Html Msg
+view model =
     let
-        homeCounter =
-            store.homeCounter
+        _ =
+            Debug.log "view" model.title
     in
+    div [ class "wrapper" ]
+        [ button [ onClick NoOp ] [ text "-" ]
+        , div [] [ text model.text ]
+        , input [ onInput Input, value model.title ] []
+        , button [ onClick ChangeTitle ] [ text "Update Title" ]
+        , a [ href "/blog" ] [ text "blog" ]
+        ]
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( inititalModel, Cmd.none )
+
+
+type alias Model =
+    { title : String
+    , value : String
+    , text : String
+    }
+
+
+inititalModel : Model
+inititalModel =
+    { title = "initialModel"
+    , value = ""
+    , text = "text"
+    }
+
+
+update : Msg -> Model -> State -> ( Model, State, Cmd Msg )
+update msg model state =
     case msg of
-        Increment ->
-            ( { store | homeCounter = { homeCounter | value = homeCounter.value + 1 } }
+        ChangeTitle ->
+            let
+                _ =
+                    Debug.log "change title" "1"
+            in
+            ( toModel model state
+            , state
             , Cmd.none
             )
 
-        Decrement ->
-            ( { store | homeCounter = { homeCounter | value = homeCounter.value - 1 } }
+        Input value ->
+            let
+                newState =
+                    dispatch state (Store.UpdateTitle value)
+
+                newModel =
+                    toModel model newState
+
+                _ =
+                    Debug.log "Home" ( value, model )
+            in
+            ( { newModel | value = value }
+            , newState
             , Cmd.none
             )
 
         _ ->
-            ( store
+            ( model
+            , state
             , Cmd.none
             )
 
 
-view : Html Msg
-view =
-    div [ class "wrapper" ]
-        [ button [ onClick Decrement ] [ text "-" ]
+toModel : Model -> State -> Model
+toModel model state =
+    let
+        text =
+            if String.isEmpty state.notFoundTitle then
+                model.text
 
-        -- , div [] [ text (String.fromInt store.homeCounter.value) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , a [ href "/blog" ] [ text "blog" ]
-        ]
+            else
+                state.notFoundTitle
+    in
+    { model | text = text, title = state.notFoundTitle }

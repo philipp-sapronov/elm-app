@@ -1,31 +1,39 @@
 module Pages.NotFound exposing (..)
 
-import Html exposing (Html, div, text)
-import Html.Attributes exposing (href)
-import Store.Main exposing (Store)
+import Html exposing (Html, a, button, div, text)
+import Html.Attributes exposing (class, href)
+import Html.Events exposing (onClick)
 
 
 type Msg
-    = Unit
+    = NoOp
 
 
-init : Store -> ( Store, Cmd Msg )
-init store =
-    ( store, Cmd.none )
-
-
-update : Msg -> Store -> ( Store, Cmd Msg )
-update msg model =
-    case msg of
-        _ ->
-            ( model
-            , Cmd.none
-            )
-
-
-view : Store -> Html Msg
-view store =
-    div []
-        [ div [] [ Html.text store.notFoundTitle.value ]
-        , Html.a [ href "/" ] [ text "home" ]
+view : Html Msg
+view =
+    div [ class "wrapper" ]
+        [ button [ onClick NoOp ] [ text "-" ]
+        , a [ href "/blog" ] [ text "blog" ]
         ]
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( inititalModel, Cmd.none )
+
+
+type alias Model =
+    { title : String
+    }
+
+
+inititalModel : Model
+inititalModel =
+    { title = "initialModel" }
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model
+    , Cmd.none
+    )

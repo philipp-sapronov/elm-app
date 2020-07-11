@@ -1,50 +1,39 @@
 module Pages.Blog exposing (..)
 
 import Html exposing (Html, a, button, div, text)
-import Html.Attributes exposing (href, style)
+import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
-import Store.Main exposing (Store)
 
 
 type Msg
-    = Increment
-    | Decrement
-    | Unit
+    = NoOp
 
 
-init : Store -> ( Store, Cmd Msg )
-init store =
-    ( store, Cmd.none )
-
-
-update : Msg -> Store -> ( Store, Cmd Msg )
-update msg store =
-    let
-        blogCounter =
-            store.blogCounter
-    in
-    case msg of
-        Increment ->
-            ( { store | blogCounter = { blogCounter | value = blogCounter.value + 1 } }
-            , Cmd.none
-            )
-
-        Decrement ->
-            ( { store | blogCounter = { blogCounter | value = blogCounter.value - 1 } }
-            , Cmd.none
-            )
-
-        _ ->
-            ( store
-            , Cmd.none
-            )
-
-
-view : Store -> Html Msg
-view store =
-    div [ style "display" "flex" ]
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt store.blogCounter.value) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , a [ href "/" ] [ text "home" ]
+view : Html Msg
+view =
+    div [ class "wrapper" ]
+        [ button [ onClick NoOp ] [ text "-" ]
+        , a [ href "/blog" ] [ text "blog" ]
         ]
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( inititalModel, Cmd.none )
+
+
+type alias Model =
+    { title : String
+    }
+
+
+inititalModel : Model
+inititalModel =
+    { title = "initialModel" }
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model
+    , Cmd.none
+    )

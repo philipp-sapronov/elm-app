@@ -11,11 +11,30 @@ type Msg
     | PublicMsg Public.Msg
 
 
-privateView : (Msg -> msg) -> Html msg -> Html msg
-privateView toMsg content =
-    Private.view (wrapMsg toMsg PrivateMsg) content
+type Model
+    = PrivateModel Private.Model
+    | PublicModel Public.Model
 
 
-publicView : (Msg -> msg) -> Html msg -> Html msg
-publicView toMsg content =
-    Public.view (wrapMsg toMsg PublicMsg) content
+initialModel =
+    PrivateModel { title = "ololo" }
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( PrivateModel { title = "title" }, Cmd.none )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model, Cmd.none )
+
+
+view : (Msg -> msg) -> Model -> Html msg -> Html msg
+view toMsg model content =
+    case model of
+        PrivateModel mdl ->
+            Private.view (wrapMsg toMsg PrivateMsg) content
+
+        PublicModel mdl ->
+            Public.view (wrapMsg toMsg PublicMsg) content

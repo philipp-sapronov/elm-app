@@ -2,20 +2,31 @@ module Pages.Main exposing (..)
 
 import Html exposing (Html)
 import Layout.Main as Layout exposing (..)
-import Pages.Blog as BlogPage exposing (..)
-import Pages.Home as HomePage exposing (..)
-import Pages.NotFound as NotFoundPage exposing (..)
+import Pages.Blog as Blog exposing (..)
+import Pages.Home as Home exposing (..)
+import Pages.NotFound as NotFound exposing (..)
 import Platform.Cmd as Cmd
 import Router.Main as Router
-import Store.Main exposing (Store)
+import Session.Main exposing (Session)
+import Store.Main as Store exposing (..)
 import Url exposing (Url)
 import Util.Main exposing (mapHtml, mapUpdate, wrapMsg)
 
 
+
+{-
+   Pages (pages controller)
+   should:
+   1. Decide which page renders
+   2. Get masseges from pages and update them
+   3.
+-}
+
+
 type PagesMsg
-    = HomeMsg HomePage.Msg
-    | BlogMsg BlogPage.Msg
-    | NotFoundMsg NotFoundPage.Msg
+    = HomeMsg Home.Msg
+    | BlogMsg Blog.Msg
+    | NotFoundMsg NotFound.Msg
     | LayoutMsg Layout.Msg
 
 
@@ -24,83 +35,98 @@ type Msg
 
 
 view : Model -> ( String, Html Msg )
-view model =
+view { pageModel, layoutModel } =
     let
-        title =
-            toTitle model
-
         layoutView =
-            case model of
-                NotFoundModel _ ->
-                    Layout.publicView wrappedLayoutMsg
-
-                _ ->
-                    Layout.privateView wrappedLayoutMsg
+            Layout.view layoutMsg__ layoutModel
 
         pageView =
-            case model of
-                HomeModel _ ->
-                    mapHtml wrappedHomeMsg HomePage.view
+            case pageModel of
+                HomeModel homeModel ->
+                    mapHtml homeMsg__ (Home.view homeModel)
 
                 _ ->
                     Html.text ""
     in
-    ( title, layoutView pageView )
+    ( toTitle pageModel, layoutView pageView )
 
 
-type Model
-    = HomeModel Store
-    | BlogModel Store
-    | NotFoundModel Store
+type PageModel
+    = HomeModel Home.Model
+    | BlogModel Blog.Model
+    | NotFoundModel NotFound.Model
 
 
-init : Url -> Store -> ( Model, Cmd Msg )
-init url store =
+type alias Model =
+    { pageModel : PageModel
+    , layoutModel : Layout.Model
+    }
+
+
+
+-- INIT
+
+
+init : Url -> ( Model, Cmd Msg )
+init url =
     let
-        route =
-            Router.parse url
+        ( layoutModel, layoutCmd ) =
+            initLayout
+
+        ( pageModel, pageCmd ) =
+            initPage (Router.parse url)
     in
+    ( { pageModel = pageModel, layoutModel = layoutModel }, Cmd.batch [ layoutCmd, pageCmd ] )
+
+
+initLayout : ( Layout.Model, Cmd Msg )
+initLayout =
+    let
+        ( subModel, subCmd ) =
+            Layout.init
+    in
+    ( subModel, Cmd.map layoutMsg__ subCmd )
+
+
+initPage : Router.Route -> ( PageModel, Cmd Msg )
+initPage route =
     case route of
         Router.Home _ ->
-            HomePage.init store |> mapUpdate wrappedHomeMsg HomeModel
+            Home.init |> mapUpdate homeMsg__ HomeModel
 
         Router.Blog _ ->
-            BlogPage.init store |> mapUpdate wrappedBlogMsg BlogModel
+            Blog.init |> mapUpdate blogMsg__ BlogModel
 
         _ ->
-            NotFoundPage.init store |> mapUpdate wrappedNotFoundMsg NotFoundModel
+            NotFound.init |> mapUpdate notFoundMsg__ NotFoundModel
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update (Msg msg) model =
-    case ( msg, model ) of
-        ( LayoutMsg mmm, _ ) ->
-            ( model, Cmd.none )
 
-        ( HomeMsg homeMsg, HomeModel store ) ->
-            HomePage.update homeMsg store |> mapUpdate wrappedHomeMsg HomeModel
+-- UPDATE
 
-        ( BlogMsg blogMsg, BlogModel store ) ->
-            BlogPage.update blogMsg store |> mapUpdate wrappedBlogMsg BlogModel
+
+update : Msg -> Model -> State -> Session -> ( Model, State, Cmd Msg )
+update (Msg msg) model state session =
+    case ( msg, model.pageModel ) of
+        ( LayoutMsg layoutMsg, _ ) ->
+            let
+                ( layoutModel, layoutCmd ) =
+                    Layout.update layoutMsg model.layoutModel
+            in
+            ( { model | layoutModel = layoutModel }, state, Cmd.map layoutMsg__ layoutCmd )
+
+        ( HomeMsg homeMsg, HomeModel homeModel ) ->
+            let
+                ( pageModel, newState, cmd ) =
+                    Home.update homeMsg homeModel state
+            in
+            ( { model | pageModel = HomeModel pageModel }, newState, Cmd.map homeMsg__ cmd )
 
         ( _, _ ) ->
-            ( model, Cmd.none )
+            ( model, state, Cmd.none )
 
 
-toStore : Model -> Store
-toStore model =
-    case model of
-        HomeModel store ->
-            store
-
-        BlogModel store ->
-            store
-
-        NotFoundModel store ->
-            store
-
-
-toTitle : Model -> String
+toTitle : PageModel -> String
 toTitle model =
     case model of
         HomeModel _ ->
@@ -113,17 +139,17 @@ toTitle model =
             "404"
 
 
-wrappedHomeMsg =
+homeMsg__ =
     wrapMsg Msg HomeMsg
 
 
-wrappedBlogMsg =
+blogMsg__ =
     wrapMsg Msg BlogMsg
 
 
-wrappedNotFoundMsg =
+notFoundMsg__ =
     wrapMsg Msg NotFoundMsg
 
 
-wrappedLayoutMsg =
+layoutMsg__ =
     wrapMsg Msg LayoutMsg
