@@ -91,10 +91,10 @@ initLayout =
 initPage : Router.Route -> ( PageModel, Cmd Msg )
 initPage route =
     case route of
-        Router.Home _ ->
+        Router.Home ->
             Home.init |> mapUpdate homeMsg__ HomeModel
 
-        Router.Blog _ ->
+        Router.Blog ->
             Blog.init |> mapUpdate blogMsg__ BlogModel
 
         _ ->
