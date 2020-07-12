@@ -5,8 +5,21 @@ import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
 
 
+
+--  TYPES
+
+
 type Msg
     = NoOp
+
+
+type alias Model =
+    { title : String
+    }
+
+
+
+-- VIEW
 
 
 view : Html Msg
@@ -17,19 +30,17 @@ view =
         ]
 
 
+
+-- INIT
+
+
 init : ( Model, Cmd Msg )
 init =
     ( inititalModel, Cmd.none )
 
 
-type alias Model =
-    { title : String
-    }
 
-
-inititalModel : Model
-inititalModel =
-    { title = "initialModel" }
+-- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -37,3 +48,16 @@ update msg model =
     ( model
     , Cmd.none
     )
+
+
+
+-- INITIAL MODEL
+
+
+inititalModel : Model
+inititalModel =
+    { title = "initialModel" }
+
+
+
+-- HELPERS

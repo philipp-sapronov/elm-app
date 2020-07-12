@@ -4,22 +4,26 @@ import Html exposing (Html)
 
 
 
--- import Store.Main exposing (Store, store)
-{-
-   Session
--}
+-- TYPES
 
 
 type Msg
     = NoOp
 
 
+type Session
+    = Auth User
+    | Guest
 
-{-
-   VIEW should
-   1: If user is authorezied return Just User
-   2: If user doesn't authorized return Nothing
--}
+
+type alias User =
+    { uid : String
+    , email : String
+    }
+
+
+
+-- VIEW
 
 
 view : Session -> Maybe User
@@ -32,18 +36,8 @@ view model =
             Nothing
 
 
-type Session
-    = Auth User
-    | Guest
 
-
-
-{-
-   UPDATE should:
-   1: Manage user data
-   2: Get message and return authorization state
-   3: Return cmd with getting authorization state
--}
+--  UPDATE
 
 
 update : Msg -> Session -> ( Session, Cmd msg )
@@ -51,14 +45,12 @@ update msg model =
     ( model, Cmd.none )
 
 
+
+-- HELPERS
+
+
 mockUser : User
 mockUser =
     { uid = "xxx-yyy-zzz"
     , email = "user@email.com"
-    }
-
-
-type alias User =
-    { uid : String
-    , email : String
     }

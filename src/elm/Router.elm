@@ -5,11 +5,7 @@ import Url.Parser as Parser exposing ((</>), Parser, map, oneOf, top)
 
 
 
-{-
-   Router
-   should:
-   1. manage routes
--}
+--  TYPES
 
 
 type Route

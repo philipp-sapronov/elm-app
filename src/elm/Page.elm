@@ -11,19 +11,22 @@ import Utils.Main exposing (mapHtml)
 
 
 
-{-
-   Pages (pages controller)
-   should:
-   1. Decide which page should be rendered
-   2. Decide which layout should be rendered
-   3. Get masseges from pages and layouts and update them
--}
---  VIEW
+--  TYPES
 
 
 type Msg
     = PageMsg Pages.Msg
     | LayoutMsg Layout.Msg
+
+
+type alias Model =
+    { pageModel : Pages.Model
+    , layoutModel : Layout.Model
+    }
+
+
+
+--  VIEW
 
 
 view : Model -> ( String, Html Msg )
@@ -40,12 +43,6 @@ view { pageModel, layoutModel } =
 
 
 -- INIT
-
-
-type alias Model =
-    { pageModel : Pages.Model
-    , layoutModel : Layout.Model
-    }
 
 
 init : Url -> ( Model, Cmd Msg )

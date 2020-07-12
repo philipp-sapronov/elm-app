@@ -9,17 +9,11 @@ import Router as Router
 import Session exposing (Session)
 import Store.Main as Store exposing (State)
 import Url exposing (Url)
-import Utils.Main exposing (mapHtml, mapUpdate, wrapMsg)
+import Utils.Main exposing (mapHtml, mapUpdate)
 
 
 
-{-
-   Pages (pages controller)
-   should:
-   1. Decide which page should be rendered
-   2. Decide which layout should be rendered
-   3. Get masseges from pages and layouts and update them
--}
+-- TYPES
 
 
 type Msg
@@ -77,6 +71,7 @@ init url =
 -- UPDATE
 
 
+update : Msg -> Model -> State -> ( Model, State, Cmd Msg )
 update msg model state =
     case ( msg, model ) of
         ( HomeMsg homeMsg, HomeModel homeModel ) ->
@@ -84,10 +79,7 @@ update msg model state =
                 ( newHomeModel, newState, homeCmd ) =
                     Home.update homeMsg homeModel state
             in
-            ( HomeModel newHomeModel
-            , newState
-            , Cmd.map HomeMsg homeCmd
-            )
+            ( HomeModel newHomeModel, newState, Cmd.map HomeMsg homeCmd )
 
         ( _, _ ) ->
             ( model, state, Cmd.none )

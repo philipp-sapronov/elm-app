@@ -6,10 +6,25 @@ import Html.Events exposing (onClick, onInput)
 import Store.Main as Store exposing (State, dispatch)
 
 
+
+--  TYPES
+
+
 type Msg
     = NoOp
     | Input String
     | ChangeTitle
+
+
+type alias Model =
+    { title : String
+    , value : String
+    , text : String
+    }
+
+
+
+--  VIEW
 
 
 view : Model -> Html Msg
@@ -23,24 +38,17 @@ view model =
         ]
 
 
+
+-- INIT
+
+
 init : ( Model, Cmd Msg )
 init =
     ( inititalModel, Cmd.none )
 
 
-type alias Model =
-    { title : String
-    , value : String
-    , text : String
-    }
 
-
-inititalModel : Model
-inititalModel =
-    { title = "initialModel"
-    , value = ""
-    , text = "text"
-    }
+--  UPDATE
 
 
 update : Msg -> Model -> State -> ( Model, State, Cmd Msg )
@@ -70,6 +78,22 @@ update msg model state =
             , state
             , Cmd.none
             )
+
+
+
+-- INITIAL MODEL
+
+
+inititalModel : Model
+inititalModel =
+    { title = "initialModel"
+    , value = ""
+    , text = "text"
+    }
+
+
+
+-- HELPERS
 
 
 toModel : Model -> State -> Model

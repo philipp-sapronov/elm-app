@@ -6,10 +6,22 @@ import Router exposing (Route(..))
 import Utils.Main exposing (mapHtml, wrapMsg)
 
 
+
+--  TYPES
+
+
 type Msg
     = Unit
     | HeaderMsg Header.Msg
     | FooterMsg String
+
+
+type alias Model =
+    { title : String }
+
+
+
+--  VIEW
 
 
 view : (Msg -> msg) -> Model -> Html msg -> Html msg
@@ -17,17 +29,21 @@ view toMsg model content =
     div []
         [ mapHtml (wrapMsg toMsg HeaderMsg) Header.view
         , content
-        , mapHtml (wrapMsg toMsg FooterMsg) footerView
+        , mapHtml (wrapMsg toMsg FooterMsg) (Html.footer [] [ Html.text "private footer" ])
         ]
 
 
-type alias Model =
-    { title : String }
+
+-- INIT
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { title = "public" }, Cmd.none )
+
+
+
+-- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -38,9 +54,4 @@ update msg model =
 
 
 
--- view : (Msg -> b -> msg) -> Html msg -> Html msg
-
-
-footerView : Html msg
-footerView =
-    Html.footer [] [ Html.text "private footer" ]
+-- HELPERS

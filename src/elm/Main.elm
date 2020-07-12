@@ -12,13 +12,7 @@ import Utils.Main exposing (mapHtml)
 
 
 
-{-
-   Main (App controller)
-   Has not to export nothing except main
-   should:
-   1. Get app messages and run updates
-   2. Manage app state
--}
+--  TYPES
 
 
 type Msg
@@ -26,6 +20,19 @@ type Msg
     | UrlChanged Url
     | SessionMsg Session.Msg
     | PageMsg Page.Msg
+
+
+type alias Model =
+    { key : Nav.Key
+    , session : Session
+    , page : Page.Model
+    , state : State
+    , url : Url
+    }
+
+
+
+--  MAIN
 
 
 main =
@@ -39,6 +46,10 @@ main =
         }
 
 
+
+-- VIEW
+
+
 view : Model -> Browser.Document Msg
 view { page } =
     let
@@ -50,13 +61,8 @@ view { page } =
     }
 
 
-type alias Model =
-    { key : Nav.Key
-    , session : Session
-    , page : Page.Model
-    , state : State
-    , url : Url
-    }
+
+--INIT
 
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -75,9 +81,14 @@ init _ url key =
     )
 
 
+
+-- UPDATE
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg ({ key, page, state, session } as model) =
     case msg of
+        --
         LinkClicked request ->
             case request of
                 Internal url ->
@@ -88,6 +99,7 @@ update msg ({ key, page, state, session } as model) =
                 External url ->
                     ( model, Nav.load url )
 
+        --
         UrlChanged url ->
             let
                 ( pageModel, pageCmd ) =
@@ -95,15 +107,18 @@ update msg ({ key, page, state, session } as model) =
             in
             ( { model | page = pageModel }, Cmd.map PageMsg pageCmd )
 
-        -- can change url
+        --
         PageMsg pageMsg ->
-            -- can change page and state
             let
                 ( pageModel, newState, pageCmd ) =
                     Page.update pageMsg page state session
             in
             ( { model | page = pageModel, state = newState }, Cmd.map PageMsg pageCmd )
 
+        --
         SessionMsg _ ->
-            -- can change session
             ( model, Cmd.none )
+
+
+
+-- HELPERS

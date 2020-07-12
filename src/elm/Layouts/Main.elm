@@ -4,19 +4,26 @@ import Html exposing (Html)
 import Layouts.Private.Main as Private exposing (..)
 import Layouts.Public.Main as Public exposing (..)
 import Platform.Cmd as Cmd
-import Session exposing (Session)
 import Store.Main as Store exposing (State)
-import Url exposing (Url)
-import Utils.Main exposing (mapHtml, mapUpdate, wrapMsg)
+import Utils.Main exposing (wrapMsg)
 
 
 
---  VIEW
+--  TYPES
 
 
 type Msg
     = PrivateMsg Private.Msg
     | PublicMsg Public.Msg
+
+
+type Model
+    = PrivateModel Private.Model
+    | PublicModel Public.Model
+
+
+
+--  VIEW
 
 
 view : (Msg -> msg) -> Model -> Html msg -> Html msg
@@ -31,11 +38,6 @@ view toMsg model content =
 
 
 -- INIT
-
-
-type Model
-    = PrivateModel Private.Model
-    | PublicModel Public.Model
 
 
 initPublic =
