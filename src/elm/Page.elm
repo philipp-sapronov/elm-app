@@ -55,7 +55,15 @@ init url =
             Pages.init url
 
         ( layoutModel, layoutCmd ) =
-            Layout.initPrivate
+            case pageModel of
+                Pages.HomeModel _ ->
+                    Layout.initPrivate
+
+                Pages.BlogModel _ ->
+                    Layout.initPrivate
+
+                Pages.NotFoundModel _ ->
+                    Layout.initPublic
     in
     ( { pageModel = pageModel, layoutModel = layoutModel }
     , Cmd.batch [ Cmd.map LayoutMsg layoutCmd, Cmd.map PageMsg pageCmd ]
