@@ -9,6 +9,10 @@ import Utils.Main exposing (nextTick)
 import Views.Icons exposing (search)
 
 
+
+--  TYPES
+
+
 type Msg
     = SearchInput String
     | SearchClick
@@ -20,6 +24,29 @@ type alias Model =
     { active : Bool
     , value : String
     }
+
+
+
+--  VIEW
+
+
+view : Model -> Html Msg
+view model =
+    div [ class "header-search" ]
+        [ Html.input
+            [ classList [ ( "input", True ), ( "active", model.active ) ]
+            , id inputId
+            , placeholder "I'm looking for..."
+            , onInput SearchInput
+            , value model.value
+            ]
+            []
+        , button [ class "icon-btn w-30 h-30 fs-16", onClick SearchClick ] [ search ]
+        ]
+
+
+
+--  UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -42,19 +69,8 @@ update msg model =
             ( model, Cmd.none )
 
 
-view : Model -> Html Msg
-view model =
-    div [ class "header-search" ]
-        [ Html.input
-            [ classList [ ( "input", True ), ( "active", model.active ) ]
-            , id inputId
-            , placeholder "I'm looking for..."
-            , onInput SearchInput
-            , value model.value
-            ]
-            []
-        , button [ class "icon-btn w-30 h-30 fs-16", onClick SearchClick ] [ search ]
-        ]
+
+-- HELPERS
 
 
 inputId =

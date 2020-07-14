@@ -1,2 +1,42 @@
 .wrapper {
 }
+
+article.post {
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  & .heading a {
+    @include font-heading();
+    text-decoration: none;
+  }
+
+  & .text {
+    @include font-text();
+    margin-bottom: 15px;
+  }
+
+  & .info {
+    @include font-subtext();
+    display: inline-block;
+    margin: 15px 0;
+  }
+}
+
+.pagination {
+  & .btn {
+    @include button-empty();
+    height: 20px;
+    margin-right: 5px;
+    & .arrow-left,
+    & .arrow-right {
+      fill: $accent-main;
+    }
+  }
+
+  & .btn:disabled {
+    & .arrow-left,
+    & .arrow-right {
+      fill: $light-gray;
+    }
+  }
+}

@@ -1,8 +1,10 @@
-module Pages.Home exposing (..)
+module Pages.Home.Main exposing (..)
 
 import Html exposing (Html, a, button, div, input, text)
 import Html.Attributes exposing (class, href, value)
 import Html.Events exposing (onClick, onInput)
+import Pages.Home.Pagination as Pagination
+import Pages.Home.Posts as Posts
 import Store.Main as Store exposing (State, dispatch)
 
 
@@ -14,6 +16,8 @@ type Msg
     = NoOp
     | Input String
     | ChangeTitle
+    | NextPage
+    | PrevPage
 
 
 type alias Model =
@@ -29,12 +33,9 @@ type alias Model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "wrapper" ]
-        [ button [ onClick NoOp ] [ text "-" ]
-        , div [] [ text model.text ]
-        , input [ onInput Input, value model.title ] []
-        , button [ onClick ChangeTitle ] [ text "Update Title" ]
-        , a [ href "/blog" ] [ text "blog" ]
+    div [ class "content__inner" ]
+        [ Posts.view Posts.articles
+        , Pagination.view { onNext = NextPage, onPrev = PrevPage }
         ]
 
 

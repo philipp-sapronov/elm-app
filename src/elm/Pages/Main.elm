@@ -2,7 +2,7 @@ module Pages.Main exposing (..)
 
 import Html exposing (Html)
 import Pages.Blog as Blog exposing (..)
-import Pages.Home as Home exposing (..)
+import Pages.Home.Main as Home exposing (..)
 import Pages.NotFound as NotFound exposing (..)
 import Platform.Cmd as Cmd
 import Router as Router

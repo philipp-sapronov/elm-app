@@ -18,12 +18,14 @@ $font-text: "Merriweather", "Georgia", serif;
   text-decoration: underline;
 }
 
-@mixin font-text($color: $black, $size: 18px) {
+@mixin font-text($color: $black, $size: 16px) {
   color: $color;
   font-family: $font-text;
   font-size: $size;
   font-style: normal;
   font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 @mixin font-subtext($color: $gray, $size: 14px) {

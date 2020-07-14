@@ -9,10 +9,9 @@ $width-sm: 600px;
     box-sizing: border-box;
     flex-grow: 1;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 600px;
     width: 100%;
-    padding: 50px;
-    background-color: #d8d8d8;
+    padding: 80px 50px 50px 20px;
     @media screen and (max-width: $width-sm) {
       padding: 50px 20px;
     }
