@@ -1,8 +1,8 @@
 module Layouts.Private.Footer exposing (..)
 
 import Html exposing (Html, div, footer, span)
-import Html.Attributes as Attrs exposing (class)
-import Views.Buttons exposing (iconButton, menuButton, searchButton)
+import Html.Attributes exposing (class)
+import Views.Buttons exposing (iconButton)
 import Views.Icons as Icons exposing (fabIcon)
 import Views.Links as Links
 

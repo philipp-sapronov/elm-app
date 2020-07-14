@@ -2,6 +2,8 @@ module Utils.Main exposing (..)
 
 import Html
 import Platform.Cmd as Cmd
+import Process
+import Task
 
 
 mapCmd msg cmd =
@@ -20,6 +22,7 @@ mapUpdate mainMsg mainModel ( subModel, subCmd ) =
     ( mainModel subModel, mapCmd mainMsg subCmd )
 
 
-toModel : a -> Maybe a -> a
-toModel defaultModel model =
-    Maybe.withDefault defaultModel model
+nextTick : msg -> Cmd msg
+nextTick msg =
+    Process.sleep 0
+        |> Task.perform (\_ -> msg)

@@ -2,7 +2,6 @@ module Layouts.Private.Nav exposing (..)
 
 import Html exposing (Html, li, nav, ul)
 import Html.Attributes exposing (class)
-import Views.Buttons exposing (iconButton, menuButton, searchButton)
 import Views.Links as Links
 
 

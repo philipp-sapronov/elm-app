@@ -1,8 +1,10 @@
 module Layouts.Private.Header exposing (..)
 
-import Html exposing (Html, div, header, li, nav, ul)
-import Html.Attributes as Attrs exposing (class)
-import Views.Buttons exposing (SearchModel, iconButton, menuButton, searchButton)
+import Html exposing (Html, div, header)
+import Html.Attributes exposing (class)
+import Layouts.Private.Search as Search
+import Utils.Main exposing (mapHtml)
+import Views.Buttons exposing (iconButton, menuButton)
 import Views.Icons as Icons
 import Views.Links as Links
 
@@ -10,14 +12,12 @@ import Views.Links as Links
 type Msg
     = Click
     | DrawerMenuClick
-    | SearchInput String
-    | SearchClick
+    | SearchMsg Search.Msg
 
 
 type alias Model =
     { drawerActive : Bool
-    , searchActive : Bool
-    , searchValue : String
+    , searchModel : Search.Model
     }
 
 
@@ -27,15 +27,12 @@ update msg model =
         DrawerMenuClick ->
             ( { model | drawerActive = not model.drawerActive }, Cmd.none )
 
-        SearchClick ->
-            if model.searchActive then
-                ( { model | searchActive = not model.searchActive, searchValue = "" }, Cmd.none )
-
-            else
-                ( { model | searchActive = not model.searchActive }, Cmd.none )
-
-        SearchInput value ->
-            ( { model | searchValue = value }, Cmd.none )
+        SearchMsg searchMsg ->
+            let
+                ( searchModel, searchCmd ) =
+                    Search.update searchMsg model.searchModel
+            in
+            ( { model | searchModel = searchModel }, Cmd.map SearchMsg searchCmd )
 
         _ ->
             ( model, Cmd.none )
@@ -54,7 +51,9 @@ view model =
                 , iconButton Icons.linkedin "w-30 h-30 fs-17"
                 , iconButton Icons.telegram "w-30 h-30 fs-18"
                 , iconButton Icons.github "w-30 h-30 fs-18"
-                , div [ class "search__wrapper" ] [ searchButton (toSeatchModel model) ]
+                , div [ class "search__wrapper" ]
+                    [ mapHtml SearchMsg (Search.view model.searchModel)
+                    ]
                 ]
             ]
         ]
@@ -64,17 +63,7 @@ view model =
 --  HELPERS
 
 
-toSeatchModel : Model -> SearchModel Msg
-toSeatchModel model =
-    { value = model.searchValue
-    , active = model.searchActive
-    , onClick = SearchClick
-    , onInput = SearchInput
-    }
-
-
 initialModel =
     { drawerActive = False
-    , searchActive = False
-    , searchValue = ""
+    , searchModel = Search.initialModel
     }

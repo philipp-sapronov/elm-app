@@ -1,7 +1,6 @@
 module Layouts.Public.Main exposing (..)
 
 import Html exposing (Html, div)
-import Layouts.Public.Header as Header exposing (..)
 import Router exposing (Route(..))
 import Utils.Main exposing (mapHtml, wrapMsg)
 
@@ -11,9 +10,7 @@ import Utils.Main exposing (mapHtml, wrapMsg)
 
 
 type Msg
-    = Unit
-    | HeaderMsg Header.Msg
-    | FooterMsg String
+    = Unit ()
 
 
 type alias Model =
@@ -27,9 +24,9 @@ type alias Model =
 view : (Msg -> msg) -> Model -> Html msg -> Html msg
 view toMsg model content =
     div []
-        [ mapHtml (wrapMsg toMsg HeaderMsg) Header.view
+        [ mapHtml (wrapMsg toMsg Unit) (Html.footer [] [ Html.text "руфвук" ])
         , content
-        , mapHtml (wrapMsg toMsg FooterMsg) (Html.footer [] [ Html.text "public footer" ])
+        , mapHtml (wrapMsg toMsg Unit) (Html.footer [] [ Html.text "footer" ])
         ]
 
 
