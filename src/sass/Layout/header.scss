@@ -1,11 +1,65 @@
-header.header {
-  width: 100%;
-  height: 50px;
+.layout-01 {
+  & .header {
+    width: 100%;
+    height: 64px;
+    border-bottom: 1px solid $light-gray;
+    padding: 0 50px;
+    box-sizing: border-box;
 
-  & .header__inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+    & .header__inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+    & .header__nav {
+      & > *:not(:last-child) {
+        margin-right: 30px;
+      }
+
+      display: flex;
+      align-items: center;
+
+      & .divider {
+        width: 1px;
+        background-color: $light-gray;
+        height: 20px;
+      }
+
+      & .link {
+        height: 100%;
+      }
+    }
+    & .header-search {
+      position: relative;
+
+      & .input {
+        @include font-caption($gray, 14px);
+        border-bottom: 1px solid $light-gray;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        color: $gray;
+        height: 30px;
+        max-width: 0px;
+        padding: 0 10px;
+
+        position: absolute;
+        right: 31px;
+        top: 0;
+        transition: max-width 0.3s ease-out, visibility 0.3s ease;
+        visibility: hidden;
+        &::placeholder {
+          color: lighten($color: $gray, $amount: 15);
+        }
+        &::placeholder-shown {
+          color: $accent-main;
+        }
+        &.active {
+          visibility: visible;
+          max-width: 189px;
+        }
+      }
+    }
   }
 }

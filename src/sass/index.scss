@@ -1,17 +1,25 @@
 // theme
+@import "./Theme/pallette.scss";
+@import "./Theme/dimensions.scss";
+@import "./Theme/font-sizes.scss";
+
 @import "./Theme/fonts.scss";
-@import "./Theme/colors.scss";
 @import "./Theme/buttons.scss";
+@import "./mixins/flex.scss";
 
 // Pages
 @import "./Home/home.scss";
 
 // Layout
 @import "./Layout/header.scss";
+@import "./Layout/footer.scss";
+@import "./Layout/main.scss";
+@import "./Layout/nav.scss";
 
 // Vies
 @import "./Views/buttons.scss";
 @import "./Views/logo.scss";
+@import "./Views/links.scss";
 
 body,
 p,

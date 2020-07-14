@@ -2,6 +2,13 @@
   cursor: pointer;
 }
 
+@mixin button-empty() {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  @include button();
+}
+
 @mixin button-ghost-sm($color, $height: 20px, $width: 100px) {
   background-color: transparent;
   border: 1px solid $color;

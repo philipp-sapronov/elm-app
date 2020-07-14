@@ -1,0 +1,12 @@
+.layout-01 {
+  & .navbar {
+    & .menu {
+      @include flex-center();
+      height: 64px;
+    }
+
+    & .menu-item {
+      margin: 0 30px;
+    }
+  }
+}

@@ -1,29 +1,59 @@
-$font-heading: "Merriweather", "Georgia", serif;
-$font-text: "Montserrat", sans-serif;
+$font-heading: "Ubuntu", "sans-serif";
+$font-text: "Merriweather", "Georgia", serif;
 
-@mixin font-heading($color, $size, $weight, $transform: none, $style: normal) {
+@mixin font-heading($color: $accent-main, $size: 32px) {
   color: $color;
   font-family: $font-heading;
   font-size: $size;
   font-style: normal;
-  font-weight: $weight;
-  text-transform: $transform;
+  font-weight: 600;
 }
 
-@mixin font-text($color, $size, $weight, $transform: none, $style: normal) {
+@mixin font-link($color: $accent-main, $size: 14px) {
+  color: $color;
+  font-family: $font-heading;
+  font-size: $size;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+@mixin font-text($color: $black, $size: 18px) {
   color: $color;
   font-family: $font-text;
   font-size: $size;
   font-style: normal;
-  font-weight: $weight;
-  text-transform: $transform;
+  font-weight: 400;
 }
 
-@mixin font-button($color, $size) {
+@mixin font-subtext($color: $gray, $size: 14px) {
   color: $color;
   font-family: $font-text;
+  font-size: $size;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@mixin font-button($color: $black, $size: 12px) {
+  color: $color;
+  font-family: $font-heading;
   font-size: $size;
   font-style: normal;
   font-weight: 300;
-  text-transform: uppercase;
+}
+
+@mixin font-caption($color: $black, $size: 12px) {
+  color: $color;
+  font-family: $font-heading;
+  font-size: $size;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@mixin font-tag($color: $gray, $size: 14px) {
+  color: $color;
+  font-family: $font-heading;
+  font-size: $size;
+  font-style: normal;
+  font-weight: 400;
 }

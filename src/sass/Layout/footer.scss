@@ -1,0 +1,31 @@
+.layout-01 {
+  & .footer {
+    width: 100%;
+    height: 64px;
+    padding: 0 50px;
+    box-sizing: border-box;
+
+    & .footer__inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    & .tech-link {
+      @include font-caption(black, 14px);
+      & > * {
+        margin-right: 5px;
+      }
+    }
+
+    & .icon-set {
+      & > *:not(:last-child) {
+        margin-right: 30px;
+      }
+
+      display: flex;
+      align-items: center;
+    }
+  }
+}

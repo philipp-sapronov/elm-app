@@ -4,8 +4,7 @@ import Html exposing (Html, div, header)
 import Html.Attributes exposing (attribute, class)
 import Html.Events exposing (onClick)
 import Utils.Main exposing (mapHtml)
-import Views.Buttons exposing (menuButton, searchButton)
-import Views.Icons exposing (icon)
+import Views.Icons as Icons
 import Views.Logo exposing (logo)
 
 
@@ -22,11 +21,10 @@ view =
     header [ class "header" ]
         [ div [ class "header__inner" ]
             [ div [ class "menu-btn__wrapper" ]
-                [ menuButton
-                ]
+                []
             , div [ class "logo__wrapper", onClick Click ]
                 [ logo
                 ]
-            , div [ class "search__wrapper" ] [ searchButton ]
+            , div [ class "search__wrapper" ] []
             ]
         ]

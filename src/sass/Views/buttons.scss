@@ -1,11 +1,9 @@
 .menu-btn {
-  width: 100px;
-  @include font-button(black, 16px);
-  @include button-ghost-md(black);
+  @include button-empty();
+  @include flex-center();
 }
 
-.search-btn {
-  width: 100px;
-  @include font-button(black, 16px);
-  @include button-ghost-md(black);
+.icon-btn {
+  @include button-empty();
+  @include flex-center();
 }
