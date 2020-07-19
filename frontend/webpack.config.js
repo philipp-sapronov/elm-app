@@ -1,9 +1,17 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 const NODE_ENV = process.env.NODE_ENV;
+const PORT = process.env.DEV_SERVER_PORT;
+const BUNDLE_DIR = process.env.BUNDLE_DIR;
+
 const isDevMode = NODE_ENV === "development";
+
+//path to index.js
 const src = path.join(__dirname, "src");
+
+// path to elm.json
 const elm = path.join(__dirname);
 
 module.exports = {
@@ -13,16 +21,15 @@ module.exports = {
     historyApiFallback: true,
     host: "0.0.0.0",
     publicPath: "/",
-    port: 3000,
+    port: PORT,
   },
   entry: path.join(src, "index.js"),
   output: {
-    path: path.resolve(__dirname, "./dist"),
+    path: path.resolve(__dirname, `./${BUNDLE_DIR}`),
     publicPath: "/",
     filename: "[name].bundle.js",
   },
   devtool: isDevMode ? "source-map" : false,
-
   module: {
     rules: [
       {
@@ -47,14 +54,14 @@ module.exports = {
             {
               loader: "css-loader",
               options: {
-                sourceMap: true,
+                sourceMap: isDevMode,
                 url: false,
               },
             },
             {
               loader: "sass-loader",
               options: {
-                sourceMap: true,
+                sourceMap: isDevMode,
               },
             },
           ],
