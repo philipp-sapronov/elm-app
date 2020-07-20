@@ -1,14 +1,15 @@
-version: "3"
+version: "3.4"
 
 services:
   frontend:
     build:
       context: ./frontend
+      target: dev
       args:
         env: development
         port: 3000
     command: npm run dev
-    container_name: elm
+    container_name: dev_elm
     # env_file:
     #   - ./list.env
     image: app/frontend:dev

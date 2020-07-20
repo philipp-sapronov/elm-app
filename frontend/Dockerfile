@@ -1,26 +1,30 @@
-# node alpine3.11
-FROM node:14.5.0-alpine3.11 as app
+#### Developmet stage ####
+FROM node:14.5.0-alpine3.11 as dev
 
-ARG env
-ARG port
-
-ENV BUILD_DIR=dist
-ENV BUILD_MODE=$env
-ENV PORT=$port
+RUN wget -O - 'https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz' \
+  | gunzip -c >/usr/local/bin/elm && \
+  chmod +x /usr/local/bin/elm
 
 WORKDIR /usr/app
 
-RUN wget -O - 'https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz' \
-  | gunzip -c >/usr/local/bin/elm
-RUN chmod +x /usr/local/bin/elm
-
-COPY . .
-
+COPY package*.json ./
 RUN npm install
-RUN if [ "$env" = "production" ] ; then npm run build ; fi
 
-# nginx alpine3.11
-FROM nginx:1.19.1-alpine
+COPY elm.json webpack.config.js ./
+COPY src ./src
 
-COPY --from=app /usr/app/dist /usr/share/nginx/html
+ARG env
+ENV NODE_ENV=$env
+ENV PORT=3000
+
+#### Build stage ####
+FROM dev as build
+ENV BUILD_DIR=dist
+RUN npm run build
+
+#### Production stage ####
+FROM nginx:1.19.1-alpine as prod
+WORKDIR /usr/app
+RUN rm /etc/nginx/conf.d/default.conf
+COPY --from=build /usr/app/dist ./
 COPY nginx.conf /etc/nginx/nginx.conf

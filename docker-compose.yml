@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 networks:
   frontend:
@@ -12,14 +12,17 @@ services:
       - "80:8080"
     networks:
       - frontend
-    # volumes:
-    #   - ./proxy/conf:/etc/nginx
+    volumes:
+      - ./proxy/conf/nginx.conf:/etc/nginx/nginx.conf
 
   frontend:
     build:
       context: ./frontend
+      target: prod
       args:
         env: production
     container_name: elm
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - frontend

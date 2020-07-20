@@ -2,12 +2,12 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const BUILD_MODE = process.env.BUILD_MODE || "production";
+const NODE_ENV = process.env.NODE_ENV;
 const BUILD_DIR = process.env.BUILD_DIR;
 const PORT = process.env.PORT;
 
-console.log(">>>>>>>>>>>>>>>", BUILD_MODE, PORT, BUILD_DIR);
-const isDevMode = BUILD_MODE === "development";
+console.log(">>>>>>>>>>>>>>>", NODE_ENV, PORT, BUILD_DIR);
+const isDevMode = NODE_ENV === "development";
 
 //path to index.js
 const src = path.join(__dirname, "src");
@@ -16,7 +16,7 @@ const src = path.join(__dirname, "src");
 const elm = path.join(__dirname);
 
 module.exports = {
-  mode: BUILD_MODE,
+  mode: NODE_ENV,
   devServer: {
     contentBase: false,
     historyApiFallback: true,
