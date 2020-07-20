@@ -10,8 +10,6 @@ services:
         port: 3000
     command: npm run dev
     container_name: dev_elm
-    # env_file:
-    #   - ./list.env
     image: app/frontend:dev
     ports:
       - 3000:3000
