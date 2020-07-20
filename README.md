@@ -1,9 +1,13 @@
 # **Elm app**
 
-### Requirements
-
 ![Elm logo](/frontend/src/public/elm-logo.png)
 ![Elm logo](/frontend/src/public/elm-logo-transformer.png)
+
+### Requirements
+
+![Elm logo](/frontend/src/public/nodejs.png)
+![Elm logo](/frontend/src/public/docker.png)
+![Elm logo](/frontend/src/public/docker-compose.png)
 
 1. Docker
 2. Docker Compose
