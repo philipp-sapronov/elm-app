@@ -2,6 +2,9 @@
 
 ### Requirements
 
+![Elm logo](/frontend/src/public/elm-logo.png)
+![Elm logo](/frontend/src/public/elm-logo-transformer.png)
+
 1. Docker
 2. Docker Compose
 3. Node
