@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { userSelector } from "../auth/selectors";
 import { PrivateLayout } from "./private";
+import {PublicLayout} from "./public";
 
 export const Layout: React.FC = ({ children }) => {
   const user = useSelector(userSelector);
