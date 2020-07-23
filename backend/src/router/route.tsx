@@ -6,12 +6,8 @@ interface Props extends RouteProps {}
 
 export const Route = ({ component, ...rest }: Props) => {
   if (!component) {
-    console.log("componenr");
-
     return null;
   }
-
-  console.log("componenr");
 
   const routeComponent = (props: any) => React.createElement(component, props);
 

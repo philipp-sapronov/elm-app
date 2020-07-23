@@ -44,7 +44,7 @@ export const useHeaderStyles = makeStyles((theme: Theme) => {
       },
     },
     searchIcon: {
-      padding: theme.spacing(0, 0, 0, 1),
+      padding: theme.spacing(0, 1.5),
       height: "100%",
       position: "absolute",
       pointerEvents: "none",
@@ -57,14 +57,14 @@ export const useHeaderStyles = makeStyles((theme: Theme) => {
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(3)}px)`,
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
       fontSize: 14,
       transition: theme.transitions.create("width"),
       width: "100%",
       [theme.breakpoints.up("sm")]: {
-        width: "12ch",
+        width: "20ch",
         "&:focus": {
-          width: "20ch",
+          width: "28ch",
         },
       },
     },
@@ -93,6 +93,17 @@ export const useDrawerStyles = makeStyles((theme: Theme) => {
       [theme.breakpoints.up("sm")]: {
         width: drawerWidthCollapsed,
       },
+    },
+    navlink: {
+      color: "inherit",
+      textDecoration: "inherit",
+      width: "100%",
+    },
+    listItem: { padding: 0 },
+    iconButton: {
+      padding: theme.spacing(1, 3),
+      width: drawerWidth,
+      boxSizing: 'border-box',
     },
     toolbar: {
       display: "flex",

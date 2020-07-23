@@ -1,16 +1,17 @@
 import React from "react";
-import { Drawer as MUIDrawer, DrawerProps } from "@material-ui/core";
-import { useDrawerStyles } from "./styles";
+import {
+  Drawer as MUIDrawer,
+  DrawerProps,
+  IconButton,
+  Divider,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ButtonBase,
+  List,
+} from "@material-ui/core";
 import clsx from "clsx";
-import IconButton from "@material-ui/core/IconButton";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-// import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -21,6 +22,8 @@ import AppsIcon from "@material-ui/icons/Apps";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
+import { useDrawerStyles } from "./styles";
+import { NavLink } from "react-router-dom";
 const navListEntities = [
   { title: "Dashboard", link: "/", icon: DashboardIcon },
   { title: "Articles", link: "/articles", icon: AssignmentIcon },
@@ -65,22 +68,30 @@ export const Drawer: React.FC<
       <Divider />
       <List>
         {navListEntities.map(({ title, icon: Icon, link }) => (
-          <ListItem button key={title} onClick={() => console.log(link)}>
-            <ListItemIcon>
-              <Icon />
-            </ListItemIcon>
-            <ListItemText primary={title} />
+          <ListItem disableGutters className={classes.listItem}>
+            <NavLink key={title} to={link} className={classes.navlink}>
+              <ButtonBase component="div" classes={{ root: classes.iconButton }}>
+                <ListItemIcon>
+                  <Icon />
+                </ListItemIcon>
+                <ListItemText primary={title} />
+              </ButtonBase>
+            </NavLink>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
         {navListSettings.map(({ title, icon: Icon, link }) => (
-          <ListItem button key={title} onClick={() => console.log(link)}>
-            <ListItemIcon>
-              <Icon />
-            </ListItemIcon>
-            <ListItemText primary={title} />
+          <ListItem disableGutters className={classes.listItem}>
+            <NavLink key={title} to={link} className={classes.navlink}>
+              <ButtonBase component="div" classes={{ root: classes.iconButton }}>
+                <ListItemIcon>
+                  <Icon />
+                </ListItemIcon>
+                <ListItemText primary={title} />
+              </ButtonBase>
+            </NavLink>
           </ListItem>
         ))}
       </List>
