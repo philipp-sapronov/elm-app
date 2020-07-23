@@ -26,7 +26,7 @@ import { useDrawerStyles } from "./styles";
 import { NavLink } from "react-router-dom";
 const navListEntities = [
   { title: "Dashboard", link: "/", icon: DashboardIcon },
-  { title: "Articles", link: "/articles", icon: AssignmentIcon },
+  { title: "Articles", link: "/posts", icon: AssignmentIcon },
   { title: "Categories", link: "/categories", icon: CategoryIcon },
   { title: "Tags", link: "/tags", icon: TurnedInIcon },
   { title: "Menu", link: "/menu", icon: AppsIcon },
@@ -40,10 +40,10 @@ const navListSettings = [
 
 export const Drawer: React.FC<
   {
-    handleClose: () => void;
+    toggle: () => void;
     open: boolean;
   } & DrawerProps
-> = ({ handleClose, open }) => {
+> = ({ toggle, open }) => {
   const classes = useDrawerStyles();
 
   return (
@@ -61,7 +61,7 @@ export const Drawer: React.FC<
       }}
     >
       <div className={classes.toolbar}>
-        <IconButton onClick={handleClose} color="inherit" aria-label="open drawer" edge="start">
+        <IconButton onClick={toggle} color="inherit" aria-label="open drawer" edge="start">
           {open ? <ChevronLeftIcon /> : <MenuIcon />}
         </IconButton>
       </div>
