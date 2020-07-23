@@ -8,18 +8,31 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
-
 import ListItemText from "@material-ui/core/ListItemText";
-const navigationMenu = [
-  { title: "Articles", link: "/articles", icon: MailIcon },
-  { title: "Categories", link: "/categories", icon: MailIcon },
-  { title: "Menu", link: "/menu", icon: MailIcon },
-  { title: "Tags", link: "/tags", icon: MailIcon },
-  { title: "Media", link: "/media", icon: MailIcon },
-  { title: "Settings", link: "/settings", icon: MailIcon },
+
+// import MailIcon from "@material-ui/icons/Mail";
+import MenuIcon from "@material-ui/icons/Menu";
+import PermMediaIcon from "@material-ui/icons/PermMedia";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import CategoryIcon from "@material-ui/icons/Category";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import AppsIcon from "@material-ui/icons/Apps";
+import TurnedInIcon from "@material-ui/icons/TurnedIn";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+
+const navListEntities = [
+  { title: "Dashboard", link: "/", icon: DashboardIcon },
+  { title: "Articles", link: "/articles", icon: AssignmentIcon },
+  { title: "Categories", link: "/categories", icon: CategoryIcon },
+  { title: "Tags", link: "/tags", icon: TurnedInIcon },
+  { title: "Menu", link: "/menu", icon: AppsIcon },
+];
+
+const navListSettings = [
+  { title: "Users", link: "/users", icon: AccountBoxIcon },
+  { title: "Media", link: "/media", icon: PermMediaIcon },
+  { title: "Settings", link: "/settings", icon: SettingsIcon },
 ];
 
 export const Drawer: React.FC<
@@ -51,7 +64,7 @@ export const Drawer: React.FC<
       </div>
       <Divider />
       <List>
-        {navigationMenu.map(({ title, icon: Icon, link }) => (
+        {navListEntities.map(({ title, icon: Icon, link }) => (
           <ListItem button key={title} onClick={() => console.log(link)}>
             <ListItemIcon>
               <Icon />
@@ -61,6 +74,16 @@ export const Drawer: React.FC<
         ))}
       </List>
       <Divider />
+      <List>
+        {navListSettings.map(({ title, icon: Icon, link }) => (
+          <ListItem button key={title} onClick={() => console.log(link)}>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <ListItemText primary={title} />
+          </ListItem>
+        ))}
+      </List>
     </MUIDrawer>
   );
 };
