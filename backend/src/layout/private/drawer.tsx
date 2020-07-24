@@ -11,7 +11,6 @@ import {
   List,
 } from "@material-ui/core";
 import clsx from "clsx";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import PermMediaIcon from "@material-ui/icons/PermMedia";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -21,6 +20,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import AppsIcon from "@material-ui/icons/Apps";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 
 import { useDrawerStyles } from "./styles";
 import { NavLink } from "react-router-dom";
@@ -62,7 +62,7 @@ export const Drawer: React.FC<
     >
       <div className={classes.toolbar}>
         <IconButton onClick={toggle} color="inherit" aria-label="open drawer" edge="start">
-          {open ? <ChevronLeftIcon /> : <MenuIcon />}
+          {open ? <MenuOpenIcon /> : <MenuIcon />}
         </IconButton>
       </div>
       <Divider />

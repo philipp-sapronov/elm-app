@@ -1,5 +1,6 @@
 import React from "react";
+import {Main} from "../components/main";
 
 export const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return <Main/>;
 };

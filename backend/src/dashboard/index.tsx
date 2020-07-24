@@ -11,6 +11,7 @@ import { Menu } from "./containers/menu";
 
 export const dashboardRoutes = [
   <Route key={"dashboard"} path={"/posts"} exact component={Posts} />,
+  <Route key={"dashboard"} path={"/posts/:slug"} exact component={Posts} />,
   <Route key={"dashboard"} path={"/categories"} exact component={Categories} />,
   <Route key={"dashboard"} path={"/media"} exact component={Media} />,
   <Route key={"dashboard"} path={"/settings"} exact component={Settings} />,

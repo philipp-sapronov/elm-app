@@ -103,7 +103,7 @@ export const useDrawerStyles = makeStyles((theme: Theme) => {
     iconButton: {
       padding: theme.spacing(1, 3),
       width: drawerWidth,
-      boxSizing: 'border-box',
+      boxSizing: "border-box",
     },
     toolbar: {
       display: "flex",
