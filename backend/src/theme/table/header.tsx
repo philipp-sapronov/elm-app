@@ -8,29 +8,24 @@ import {
   TableSortLabel,
 } from "@material-ui/core";
 import { useStyles } from "./styles";
+import { Column, Row } from "./row";
 
 type Order = "asc" | "desc";
 
-interface TableHeadProps {
+interface TableHeadProps<T extends Row> {
   checkedCnt: number;
   onSort: (event: React.MouseEvent<unknown>, property: keyof any) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
   order: Order;
   orderBy: string;
   rowsCnt: number;
-  cells: HeadCell[];
+  columns: Array<Column<T>>;
 }
 
-export interface HeadCell {
-  id: string;
-  label: string;
-  numeric: boolean;
-}
-
-export const TableHead = (props: TableHeadProps) => {
+export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
   const classes = useStyles();
 
-  const { onSelectAllClick, order, orderBy, checkedCnt, rowsCnt, onSort, cells } = props;
+  const { onSelectAllClick, order, orderBy, checkedCnt, rowsCnt, onSort, columns } = props;
 
   const createSortHandler = (property: keyof any) => (event: React.MouseEvent<unknown>) => {
     onSort(event, property);
@@ -48,20 +43,20 @@ export const TableHead = (props: TableHeadProps) => {
             color="primary"
           />
         </TableCell>
-        {cells.map((cell) => (
+        {columns.map((column) => (
           <TableCell
-            key={cell.id}
-            align={cell.numeric ? "right" : "left"}
+            key={column.key}
+            align={column.align || "left"}
             padding="default"
-            sortDirection={orderBy === cell.id ? order : false}
+            sortDirection={orderBy === column.fieldName ? order : false}
           >
             <TableSortLabel
-              active={orderBy === cell.id}
-              direction={orderBy === cell.id ? order : "asc"}
-              onClick={createSortHandler(cell.id)}
+              active={orderBy === column.fieldName}
+              direction={orderBy === column.fieldName ? order : "asc"}
+              onClick={createSortHandler(column.fieldName)}
             >
-              {cell.label}
-              {orderBy === cell.id ? (
+              {column.title}
+              {orderBy === column.fieldName ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>

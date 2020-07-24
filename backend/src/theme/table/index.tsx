@@ -12,15 +12,7 @@ import { TableHead } from "./header";
 import { useTable } from "./useTable";
 import { Row, Column, TableRow } from "./row";
 
-export function Table<T extends Row>({
-  rows,
-  headCells,
-  columns,
-}: {
-  rows: T[];
-  headCells: any[];
-  columns: Array<Column<T>>;
-}) {
+export function Table<T extends Row>({ rows, columns }: { rows: T[]; columns: Array<Column<T>> }) {
   const classes = useStyles();
 
   const {
@@ -51,7 +43,7 @@ export function Table<T extends Row>({
               onSelectAllClick={handleSelectAll}
               onSort={handleSort}
               rowsCnt={rows.length}
-              cells={headCells}
+              columns={columns}
             />
             <TableBody>
               {rows.map((row, idx) => {

@@ -36,6 +36,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     hover: {},
     rowSelected: {},
+    rowRoot: {
+      height: 60,
+    },
     visuallyHidden: {
       border: 0,
       clip: "rect(0 0 0 0)",

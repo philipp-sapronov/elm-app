@@ -4,8 +4,10 @@ import { Checkbox, TableCell, TableRow as MuiTableRow } from "@material-ui/core"
 
 export interface Column<T extends Row> {
   fieldName: keyof T;
-  numeric?: boolean;
   render?: (row: T) => React.ReactNode;
+  title: string;
+  key: string;
+  align?: "left" | "right";
 }
 
 export interface Row {
@@ -36,15 +38,14 @@ export const TableRow = <T extends Row>({
       tabIndex={-1}
       key={row.id}
       selected={checked}
-      classes={{ selected: classes.rowSelected }}
-      style={{ height: 53 }}
+      classes={{ selected: classes.rowSelected, root: classes.rowRoot }}
     >
       <TableCell padding="checkbox">
         <Checkbox checked={checked} inputProps={{ "aria-labelledby": labelId }} color="primary" />
       </TableCell>
       {columns.map((column) => {
         return (
-          <TableCell id={labelId} scope="row" align={column.numeric ? "right" : "left"}>
+          <TableCell id={labelId} scope="row" align={column.align || "left"}>
             {column.render ? column.render(row) : row[column.fieldName]}
           </TableCell>
         );

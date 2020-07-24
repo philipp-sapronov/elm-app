@@ -3,29 +3,35 @@ import { Category } from "../../containers/categories";
 import { Table } from "../../../theme/table";
 
 type Row = {
-  title: string;
-  status: number;
-  id: string;
   amount: string;
+  date: string;
+  id: string;
+  status: number;
+  title: string;
+  url: string;
 };
 
 const rows = [
-  { title: "Cupcake", status: 200, id: "10.1", amount: "123" },
-  { title: "Cupcake", status: 200, id: "10.21", amount: "123" },
-  { title: "Cupcake", status: 200, id: "10.13", amount: "123" },
-];
-
-const headCells = [
-  { id: "title", numeric: false, label: "Title" },
-  { id: "status", numeric: true, label: "Status" },
+  { title: "First", status: 200, id: "111", amount: 1, url: "/link", date: "20 august" },
+  { title: "Second", status: 200, id: "222", amount: 22, url: "/link", date: "20 august" },
+  { title: "Third", status: 200, id: "333", amount: 14, url: "/link", date: "20 august" },
+  { title: "Fourth", status: 200, id: "444", amount: 0, url: "/link", date: "20 august" },
 ];
 
 const columns = [
-  { fieldName: "amount" as keyof Row, numeric: true },
-  { fieldName: "status" as keyof Row },
-  { fieldName: "title" as keyof Row, render: (row: any) => <div>{row.title}</div> },
+  { fieldName: "title" as keyof Row, key: "title", title: "Title" },
+  { fieldName: "amount" as keyof Row, align: "right" as const, key: "amount", title: "Amount" },
+  { fieldName: "status" as keyof Row, align: "right" as const, key: "status", title: "Status" },
+  { fieldName: "date" as keyof Row, align: "right" as const, key: "date", title: "Updated" },
+  {
+    fieldName: "url" as keyof Row,
+    align: "right" as const,
+    render: (row: any) => <div>{'</>'} {row.title}</div>,
+    key: "url",
+    title: "Link",
+  },
 ];
 
 export const Categories = ({ data }: { data: Category[] }) => {
-  return <Table rows={rows} headCells={headCells} columns={columns} />;
+  return <Table rows={rows} columns={columns} />;
 };
