@@ -1,29 +1,23 @@
 import React from "react";
-import {
-  Table as MuiTable,
-  TableBody,
-  TableContainer,
-  TablePagination,
-  Paper,
-} from "@material-ui/core";
+import { Table as MuiTable, TableBody, TableContainer, Paper } from "@material-ui/core";
 import { useStyles } from "./styles";
 import { TableToolbar } from "./toolbar";
-import { TableHead } from "./header";
+import { SortProps, TableHead } from "./header";
 import { useTable } from "./useTable";
 import { Row, Column, TableRow } from "./row";
+import { PaginationProps, TablePagination } from "./pagination";
 
-export function Table<T extends Row>({ rows, columns }: { rows: T[]; columns: Array<Column<T>> }) {
+export function Table<T extends Row>(props: {
+  rows: T[];
+  columns: Array<Column<T>>;
+  paginationProps: PaginationProps;
+  sortProps: SortProps<T>;
+}) {
   const classes = useStyles();
 
-  const {
-    checkedList,
-    isChecked,
-    handleSort,
-    handleClick,
-    handleSelectAll,
-    handleChangePage,
-    handleChangeRowsPerPage,
-  } = useTable({ rows });
+  const { paginationProps, sortProps, rows, columns } = props;
+
+  const { checkedList, isChecked, handleClick, handleCheckAll } = useTable({ rows });
 
   return (
     <div className={classes.root}>
@@ -38,12 +32,10 @@ export function Table<T extends Row>({ rows, columns }: { rows: T[]; columns: Ar
           >
             <TableHead
               checkedCnt={checkedList.length}
-              order={"desc"}
-              orderBy={"name"}
-              onSelectAllClick={handleSelectAll}
-              onSort={handleSort}
-              rowsCnt={rows.length}
               columns={columns}
+              onCheck={handleCheckAll}
+              rowsCnt={rows.length}
+              sortProps={sortProps}
             />
             <TableBody>
               {rows.map((row, idx) => {
@@ -65,15 +57,7 @@ export function Table<T extends Row>({ rows, columns }: { rows: T[]; columns: Ar
             </TableBody>
           </MuiTable>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={10}
-          page={1}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        <TablePagination {...paginationProps} />
       </Paper>
     </div>
   );
