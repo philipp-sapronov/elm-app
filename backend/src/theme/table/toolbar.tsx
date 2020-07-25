@@ -5,6 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 
 import AddIcon from "@material-ui/icons/Add";
+import SaveIcon from "@material-ui/icons/Save";
 
 export type ToolbarProps = {
   onCreate: () => void;
@@ -29,22 +30,21 @@ const DefaultToolbar = ({
       <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
         {title} ({cnt})
       </Typography>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <Tooltip title="Filter list">
-          <IconButton style={{ height: 50, width: 50, marginRight: 10 }} aria-label="filter list">
-            <FilterListIcon style={{ height: 30, width: 30 }} />
+          <IconButton style={{ marginRight: 10 }} aria-label="filter list">
+            <FilterListIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Filter list">
-          <IconButton
-            style={{ height: 50, width: 50 }}
-            onClick={onCreate}
-            color="primary"
-            aria-label="filter list"
-          >
-            <AddIcon style={{ height: 35, width: 35 }} />
-          </IconButton>
-        </Tooltip>
+        <Button
+          onClick={onCreate}
+          color="primary"
+          variant="outlined"
+          style={{ lineHeight: 2 }}
+          startIcon={<AddIcon />}
+        >
+          new
+        </Button>
       </div>
     </Toolbar>
   );
