@@ -13,9 +13,9 @@ export const useTable = ({ rows }: { rows: any[] }) => {
     return !event.target.checked ? setCheckedList([]) : setCheckedList(rows.map((row) => row.id));
   };
 
-  const handleClick = (id: string) => (_: MouseEvent<unknown>) => {
+  const handleClick = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
     setCheckedList((prevList) => {
-      return prevList.includes(id) ? prevList.filter(compose(not, equal(id))) : [...prevList, id];
+      return event.target.checked ? [...prevList, id] : prevList.filter(compose(not, equal(id)));
     });
   };
 

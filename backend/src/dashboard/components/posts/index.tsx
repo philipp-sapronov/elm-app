@@ -52,7 +52,7 @@ export const Categories = ({ data }: { data: Article[] }) => {
         }}
       />
       <PageDrawer open={open}>
-        <Form onClose={handleClose} />
+        <Form onClose={handleClose} title="Update Post"/>
       </PageDrawer>
     </>
   );
