@@ -133,3 +133,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+
+export const usePageDrawerStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    paper: {
+      zIndex: 1,
+      // top: 64,
+    },
+  })
+);

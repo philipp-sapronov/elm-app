@@ -1,24 +1,20 @@
 import React from "react";
 import { Categories as View } from "../components/categories";
+import { Status } from "../../enums/status.enum";
+import { Category } from "../../interfaces/category.interface";
 
-export interface Category {
-  _id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  title: string;
-}
-
-const getCategory = () => {
-  const _id = Math.random().toFixed(4);
+const getCategory = (_: null, idx: number) => {
+  const id = Math.random().toFixed(4);
   return {
-    _id,
+    id,
     createdAt: new Date(),
     updatedAt: new Date(),
-    title: "Category" + _id,
+    title: "Category" + idx,
+    status: Status.new,
   };
 };
 
 export const Categories = () => {
-  const data: Category[] = new Array(10).map(getCategory);
+  const data: Category[] = new Array(10).fill(null).map(getCategory);
   return <View data={data} />;
 };

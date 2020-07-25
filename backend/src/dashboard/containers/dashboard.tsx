@@ -1,6 +1,6 @@
 import React from "react";
-import {Main} from "../components/main";
+import { Dashboard as View } from "../components/dashboard";
 
 export const Dashboard = () => {
-  return <Main/>;
+  return <View />;
 };

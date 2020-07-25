@@ -1,7 +1,7 @@
 import React from "react";
 import { Table as MuiTable, TableBody, TableContainer, Paper } from "@material-ui/core";
 import { useStyles } from "./styles";
-import { TableToolbar } from "./toolbar";
+import { TableToolbar, ToolbarProps } from "./toolbar";
 import { SortProps, TableHead } from "./header";
 import { useTable } from "./useTable";
 import { Row, Column, TableRow } from "./row";
@@ -12,17 +12,23 @@ export function Table<T extends Row>(props: {
   columns: Array<Column<T>>;
   paginationProps: PaginationProps;
   sortProps: SortProps<T>;
+  toolbarProps: ToolbarProps;
 }) {
   const classes = useStyles();
 
-  const { paginationProps, sortProps, rows, columns } = props;
+  const { paginationProps, sortProps, rows, columns, toolbarProps } = props;
 
   const { checkedList, isChecked, handleClick, handleCheckAll } = useTable({ rows });
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableToolbar checkedCnt={checkedList.length} itemsCnt={rows.length} title={"Articles"} />
+        <TableToolbar
+          checkedCnt={checkedList.length}
+          itemsCnt={rows.length}
+          title={"Articles"}
+          {...toolbarProps}
+        />
         <TableContainer>
           <MuiTable
             className={classes.table}

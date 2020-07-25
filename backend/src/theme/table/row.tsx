@@ -45,7 +45,7 @@ export const TableRow = <T extends Row>({
       </TableCell>
       {columns.map((column) => {
         return (
-          <TableCell id={labelId} scope="row" align={column.align || "left"}>
+          <TableCell key={column.key} id={labelId} scope="row" align={column.align || "left"}>
             {column.render ? column.render(row) : row[column.fieldName]}
           </TableCell>
         );

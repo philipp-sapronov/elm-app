@@ -5,6 +5,7 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
     root: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(1),
+      height: 80,
     },
     highlight: {
       color: theme.palette.primary.main,

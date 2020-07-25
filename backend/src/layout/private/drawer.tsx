@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  Drawer as MUIDrawer,
+  Drawer as MuiDrawer,
   DrawerProps,
   IconButton,
   Divider,
-  ListItem,
+  ListItem as MuiListItem,
   ListItemIcon,
   ListItemText,
   ButtonBase,
@@ -20,7 +20,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import AppsIcon from "@material-ui/icons/Apps";
 import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 
 import { useDrawerStyles } from "./styles";
 import { NavLink } from "react-router-dom";
@@ -38,6 +38,31 @@ const navListSettings = [
   { title: "Settings", link: "/settings", icon: SettingsIcon },
 ];
 
+const ListItem = ({
+  classes,
+  link,
+  icon: Icon,
+  title,
+}: {
+  classes: ReturnType<typeof useDrawerStyles>;
+  title: string;
+  icon: React.FC;
+  link: string;
+}) => {
+  return (
+    <MuiListItem key={link} disableGutters className={classes.listItem}>
+      <NavLink to={link} className={classes.navlink}>
+        <ButtonBase component="div" classes={{ root: classes.iconButton }}>
+          <ListItemIcon>
+            <Icon />
+          </ListItemIcon>
+          <ListItemText primary={title} />
+        </ButtonBase>
+      </NavLink>
+    </MuiListItem>
+  );
+};
+
 export const Drawer: React.FC<
   {
     toggle: () => void;
@@ -47,7 +72,7 @@ export const Drawer: React.FC<
   const classes = useDrawerStyles();
 
   return (
-    <MUIDrawer
+    <MuiDrawer
       variant="permanent"
       className={clsx(classes.drawer, {
         [classes.drawerOpen]: open,
@@ -67,34 +92,16 @@ export const Drawer: React.FC<
       </div>
       <Divider />
       <List>
-        {navListEntities.map(({ title, icon: Icon, link }) => (
-          <ListItem disableGutters className={classes.listItem}>
-            <NavLink key={title} to={link} className={classes.navlink}>
-              <ButtonBase component="div" classes={{ root: classes.iconButton }}>
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={title} />
-              </ButtonBase>
-            </NavLink>
-          </ListItem>
+        {navListEntities.map((item) => (
+          <ListItem key={item.link} {...item} classes={classes} />
         ))}
       </List>
       <Divider />
       <List>
-        {navListSettings.map(({ title, icon: Icon, link }) => (
-          <ListItem disableGutters className={classes.listItem}>
-            <NavLink key={title} to={link} className={classes.navlink}>
-              <ButtonBase component="div" classes={{ root: classes.iconButton }}>
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={title} />
-              </ButtonBase>
-            </NavLink>
-          </ListItem>
+        {navListSettings.map((item) => (
+          <ListItem key={item.link} {...item} classes={classes} />
         ))}
       </List>
-    </MUIDrawer>
+    </MuiDrawer>
   );
 };

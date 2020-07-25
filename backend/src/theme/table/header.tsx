@@ -85,8 +85,6 @@ export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
             <TableCell
               key={column.key}
               align={column.align || "left"}
-              padding="default"
-              sortDirection={orderBy === column.fieldName ? order : false}
             >
               <ButtonBase
                 disableRipple
