@@ -34,7 +34,7 @@ const MenuCell = () => {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <TableCell padding="checkbox">
+    <TableCell align="center" padding="checkbox">
       <IconButton onClick={handleClick} style={{ width: 40, height: 40 }}>
         <MoreHorizIcon />
       </IconButton>

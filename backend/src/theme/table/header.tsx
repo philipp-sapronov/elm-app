@@ -82,10 +82,7 @@ export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
           ] as [number, number];
 
           return (
-            <TableCell
-              key={column.key}
-              align={column.align || "left"}
-            >
+            <TableCell key={column.key} align={column.align || "left"}>
               <ButtonBase
                 disableRipple
                 disableTouchRipple
@@ -100,6 +97,11 @@ export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
             </TableCell>
           );
         })}
+        <TableCell style={{ fontSize: 14, fontWeight: 600 }} key="actions" align={"right"}>
+          <ButtonBase disableRipple disableTouchRipple style={{ fontSize: 14, fontWeight: 600 }}>
+            Actions
+          </ButtonBase>
+        </TableCell>
       </TableRow>
     </MuiTableHead>
   );

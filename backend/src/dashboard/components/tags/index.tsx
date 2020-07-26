@@ -7,6 +7,7 @@ import { usePagination } from "../../../theme/table/usePagination";
 import { StatusLabel } from "../../../enums/status.enum";
 import { Tag } from "../../../interfaces/tag.interface";
 import { TagTypeLabel } from "../../../enums/tagType.enum";
+import { Category } from "../../../interfaces/category.interface";
 
 const columns = [
   {
@@ -15,21 +16,36 @@ const columns = [
     title: "Title",
   },
   {
-    align: "right" as const,
+    fieldName: "description" as keyof Category,
+    key: "description",
+    title: "Description",
+  },
+  {
     fieldName: "type" as keyof Tag,
     key: "type",
     render: (row: Tag) => TagTypeLabel[row.type],
     title: "Type",
   },
   {
-    align: "right" as const,
     fieldName: "status" as keyof Tag,
     key: "status",
-    render: (row: Tag) => StatusLabel[row.status],
     title: "Status",
+    render: (row: Tag) => (
+      <div style={{ display: "inline-flex", alignItems: "center" }}>
+        <div
+          style={{
+            width: 8,
+            height: 8,
+            backgroundColor: "green",
+            marginRight: 8,
+            borderRadius: 8,
+          }}
+        />
+        <span>{StatusLabel[row.status]}</span>
+      </div>
+    ),
   },
   {
-    align: "right" as const,
     fieldName: "updatedAt" as keyof Tag,
     key: "updated",
     render: (row: Tag) => moment(row.updatedAt).format("MMMM, DD YYYY"),
@@ -49,6 +65,7 @@ export const Tags = ({ data }: { data: Tag[] }) => {
   return (
     <Table
       rows={data}
+      title="Tags"
       columns={columns}
       toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
       sortProps={sortProps}

@@ -11,6 +11,7 @@ const getCategory = (_: null, idx: number) => {
     updatedAt: new Date(),
     title: "Category" + idx,
     status: Status.new,
+    description: 'Short description about category'
   };
 };
 

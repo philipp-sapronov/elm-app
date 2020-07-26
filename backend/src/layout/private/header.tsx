@@ -21,19 +21,7 @@ export const Header = ({ open }: { open: boolean }) => {
     >
       <Toolbar>
         <div style={{ display: "flex", marginLeft: 'auto', alignItems: 'center' }}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+
           <IconButton aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />

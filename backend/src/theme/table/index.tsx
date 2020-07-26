@@ -13,10 +13,11 @@ export function Table<T extends Row>(props: {
   paginationProps: PaginationProps;
   sortProps: SortProps<T>;
   toolbarProps: ToolbarProps;
+  title: string
 }) {
   const classes = useStyles();
 
-  const { paginationProps, sortProps, rows, columns, toolbarProps } = props;
+  const { paginationProps, sortProps, rows, columns, toolbarProps, title } = props;
 
   const { checkedList, isChecked, handleClick, handleCheckAll } = useTable({ rows });
 
@@ -26,7 +27,7 @@ export function Table<T extends Row>(props: {
         <TableToolbar
           checkedCnt={checkedList.length}
           itemsCnt={rows.length}
-          title={"Articles"}
+          title={title}
           {...toolbarProps}
         />
         <TableContainer>

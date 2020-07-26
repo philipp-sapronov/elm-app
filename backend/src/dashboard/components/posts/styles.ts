@@ -13,6 +13,18 @@ export const useFormStyles = makeStyles((theme: Theme) => {
       borderRadius: 0,
       transition: "background-color 0.2s ease-out",
     },
+    previewButton: {
+      "&:hover": {
+        backgroundColor: theme.palette.grey[200],
+        borderColor: theme.palette.grey[400],
+      },
+      width: 35,
+      height: 35,
+      borderRadius: 4,
+      border: "1px solid " + theme.palette.grey[200],
+      transition: "all 0.2s ease-out",
+    },
+
     wrapper: {
       width: formWidth,
       boxSizing: "border-box",
@@ -54,7 +66,7 @@ export const useFormStyles = makeStyles((theme: Theme) => {
       display: "flex",
     },
     submitButton: {
-      width: 100,
+      minWidth: 100,
     },
     statusSelect: {
       width: 200,

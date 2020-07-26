@@ -3,6 +3,7 @@ import { Categories as View } from "../components/posts";
 import { Article } from "../../interfaces/post.interface";
 import { Status } from "../../enums/status.enum";
 
+const title = "What is Lorem Ipsum?";
 const getPost = (_: null, idx: number): Article => {
   const id = Math.random().toFixed(4);
   return {
@@ -11,11 +12,12 @@ const getPost = (_: null, idx: number): Article => {
     createdAt: new Date(),
     id,
     preview: "preview",
-    slug: "article-" + idx,
+    slug: "what-is-loremipsum-" + idx,
     status: Status.new,
     tags: [],
-    title: "Article" + idx,
+    title: title + " " + idx,
     updatedAt: new Date(),
+    postedAt: new Date(),
   };
 };
 

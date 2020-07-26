@@ -18,22 +18,24 @@ import CategoryIcon from "@material-ui/icons/Category";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AppsIcon from "@material-ui/icons/Apps";
-import TurnedInIcon from "@material-ui/icons/TurnedIn";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
-
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import { useDrawerStyles } from "./styles";
 import { NavLink } from "react-router-dom";
+
 const navListEntities = [
   { title: "Dashboard", link: "/", icon: DashboardIcon },
   { title: "Articles", link: "/posts", icon: AssignmentIcon },
   { title: "Categories", link: "/categories", icon: CategoryIcon },
-  { title: "Tags", link: "/tags", icon: TurnedInIcon },
-  { title: "Menu", link: "/menu", icon: AppsIcon },
+  { title: "Tags", link: "/tags", icon: LocalOfferIcon },
+  { title: "Feedback", link: "/feedback", icon: QuestionAnswerIcon },
+  { title: "Users", link: "/users", icon: AccountBoxIcon },
 ];
 
 const navListSettings = [
-  { title: "Users", link: "/users", icon: AccountBoxIcon },
+  { title: "Menu", link: "/menu", icon: AppsIcon },
   { title: "Media", link: "/media", icon: PermMediaIcon },
   { title: "Settings", link: "/settings", icon: SettingsIcon },
 ];

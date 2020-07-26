@@ -16,6 +16,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 // import {Status} from "../../../enums/status.enum";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 // content: string;
 // createdAt: Date;
@@ -51,18 +52,18 @@ export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
           <Typography className={classes.title}>{title}</Typography>
         </div>
         <div className={classes.buttonsWrapper}>
-          <TextField
-            size="small"
-            select
-            variant="outlined"
-            label="Status"
-            classes={{ root: classes.statusSelect }}
-          />
           <Button
-            size="small"
+            color="primary"
+            variant="outlined"
+            startIcon={<VisibilityIcon />}
+            classes={{ root: classes.submitButton }}
+          >
+            preview
+          </Button>
+          <Button
             color="primary"
             variant="contained"
-            // startIcon={<SaveIcon />}
+            startIcon={<SaveIcon />}
             classes={{ root: classes.submitButton }}
           >
             save
@@ -71,6 +72,15 @@ export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
       </div>
       <div className={classes.formWrapper}>
         <form className={classes.form}>
+          <FormControl classes={{ root: classes.formControl }}>
+            <TextField
+              size="small"
+              select
+              variant="outlined"
+              label="Status"
+              classes={{ root: classes.statusSelect }}
+            />
+          </FormControl>
           <FormControl classes={{ root: classes.formControl }}>
             <TextField
               fullWidth

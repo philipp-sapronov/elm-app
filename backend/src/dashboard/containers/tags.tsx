@@ -12,6 +12,7 @@ const getTag = (_: null, idx: number) => {
     updatedAt: new Date(),
     title: "Tag" + idx,
     type: TagType.technology,
+    description: 'Short description about this tag',
     status: Status.new,
   };
 };
