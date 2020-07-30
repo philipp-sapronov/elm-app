@@ -184,7 +184,7 @@ export const Form: React.FC<PostsFormProps> = (props) => {
               name={Fields.content}
               onChange={onChange}
               required
-              rows={15}
+              rows={20}
               size="small"
               value={data.content}
               variant="outlined"

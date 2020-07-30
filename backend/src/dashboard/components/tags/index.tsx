@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
-
+import { useHistory } from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Table } from "../../../theme/table";
 import { useSort } from "../../../theme/table/useSort";
 import { usePagination } from "../../../theme/table/usePagination";
@@ -8,8 +10,7 @@ import { StatusLabel } from "../../../enums/status.enum";
 import { Tag } from "../../../interfaces/tag.interface";
 import { TagTypeLabel } from "../../../enums/tagType.enum";
 import { Category } from "../../../interfaces/category.interface";
-import { PageDrawer } from "../../../layout/private/pageDrawer";
-import { Form } from "./form";
+import { TagForm } from "../../containers/tagForm";
 
 const columns = [
   {
@@ -58,25 +59,29 @@ const columns = [
 export const Tags = ({ data }: { data: Tag[] }) => {
   const sortProps = useSort<Tag>();
   const paginationProps = usePagination({ count: data.length });
+  const { push } = useHistory();
 
-  const [open, setOpen] = useState(false);
+  const handleClickAdd = () => push("/tags/add");
+  const handleClickUpdate = () => push(`/tags/slug`);
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
-
+  const getRowActions = (row: Tag) => {
+    return [
+      { onClick: () => push(`tags/${row.title}`), icon: EditIcon, label: "Edit" },
+      { onClick: () => console.log("delete", row.title), icon: DeleteIcon, label: "Delete" },
+    ];
+  };
   return (
     <>
       <Table
         rows={data}
         title="Tags"
         columns={columns}
-        toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
+        toolbarProps={{ onCreate: handleClickAdd, onEdit: handleClickUpdate }}
         sortProps={sortProps}
         paginationProps={paginationProps}
+        getRowActions={getRowActions}
       />
-      <PageDrawer open={open}>
-        <Form onClose={handleClose} title="Update Tag" />
-      </PageDrawer>
+      <TagForm />
     </>
   );
 };

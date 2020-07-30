@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 
+import { useHistory } from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+import { CategoryForm } from "../../containers/categoryForm";
 import { Table } from "../../../theme/table";
 import { useSort } from "../../../theme/table/useSort";
 import { usePagination } from "../../../theme/table/usePagination";
 import { Category } from "../../../interfaces/category.interface";
 import { StatusLabel } from "../../../enums/status.enum";
-import { PageDrawer } from "../../../layout/private/pageDrawer";
-import { Form } from "./form";
 
 const columns = [
   {
@@ -50,10 +53,18 @@ const columns = [
 export const Categories = ({ data }: { data: Category[] }) => {
   const sortProps = useSort<Category>();
   const paginationProps = usePagination({ count: data.length });
-  const [open, setOpen] = useState(false);
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const { push } = useHistory();
+
+  const handleClickAdd = () => push("/categories/add");
+  const handleClickUpdate = () => push(`/categories/slug`);
+
+  const getRowActions = (row: Category) => {
+    return [
+      { onClick: () => push(`categories/${row.title}`), icon: EditIcon, label: "Edit" },
+      { onClick: () => console.log("delete", row.title), icon: DeleteIcon, label: "Delete" },
+    ];
+  };
   return (
     <>
       <Table
@@ -61,12 +72,11 @@ export const Categories = ({ data }: { data: Category[] }) => {
         title="Categories"
         columns={columns}
         sortProps={sortProps}
-        toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
+        getRowActions={getRowActions}
+        toolbarProps={{ onCreate: handleClickAdd, onEdit: handleClickUpdate }}
         paginationProps={paginationProps}
       />
-      <PageDrawer open={open}>
-        <Form onClose={handleClose} title="Update Category" />
-      </PageDrawer>
+      <CategoryForm />
     </>
   );
 };
