@@ -6,7 +6,8 @@ import { useSort } from "../../../theme/table/useSort";
 import { usePagination } from "../../../theme/table/usePagination";
 import { Category } from "../../../interfaces/category.interface";
 import { StatusLabel } from "../../../enums/status.enum";
-import { Article } from "../../../interfaces/post.interface";
+import { PageDrawer } from "../../../layout/private/pageDrawer";
+import { Form } from "./form";
 
 const columns = [
   {
@@ -54,13 +55,18 @@ export const Categories = ({ data }: { data: Category[] }) => {
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
   return (
-    <Table
-      rows={data}
-      title="Categories"
-      columns={columns}
-      sortProps={sortProps}
-      toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
-      paginationProps={paginationProps}
-    />
+    <>
+      <Table
+        rows={data}
+        title="Categories"
+        columns={columns}
+        sortProps={sortProps}
+        toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
+        paginationProps={paginationProps}
+      />
+      <PageDrawer open={open}>
+        <Form onClose={handleClose} title="Update Category" />
+      </PageDrawer>
+    </>
   );
 };

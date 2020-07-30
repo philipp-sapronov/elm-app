@@ -1,29 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
+import moment from "moment";
+import { useHistory } from "react-router-dom";
+import CommentsIcon from "@material-ui/icons/ModeCommentOutlined";
+import ThumbUpIcon from "@material-ui/icons/ThumbUpOutlined";
+
 import { Table } from "../../../theme/table";
 import { useSort } from "../../../theme/table/useSort";
 import { usePagination } from "../../../theme/table/usePagination";
 import { Article } from "../../../interfaces/post.interface";
 import { StatusLabel } from "../../../enums/status.enum";
-import moment from "moment";
-import { PageDrawer } from "../../../layout/private/pageDrawer";
-import { Form } from "./form";
-import CommentsIcon from "@material-ui/icons/ModeCommentOutlined";
-import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined';
-// todo add rating start or likes count, comments count
-// todo add published date instead of updated
-// todo add preview button to form
-// todo add post date input
-// todo add plus button to header
-// todo add description to tag/category
-// todo add posts count to category
-// ! todo Excerpt instead of preview
-// todo allow comments/likes
-// todo add undo btn
-// todo visibility public/private
-// todo add comments page
+import { PostsForm } from "../../containers/postsForm";
 
-// todo signup signin
-// todo move search to current page table toolbar
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+
 const columns = [
   { fieldName: "title" as keyof Article, key: "title", title: "Title" },
   {
@@ -31,8 +22,6 @@ const columns = [
     key: "url",
     title: "Slug",
   },
-  //
-
   {
     fieldName: "slug" as keyof Article,
     key: "url",
@@ -55,8 +44,6 @@ const columns = [
       </div>
     ),
   },
-
-  //
   {
     fieldName: "status" as keyof Article,
     key: "status",
@@ -85,12 +72,24 @@ const columns = [
 ];
 
 export const Categories = ({ data }: { data: Article[] }) => {
-  const [open, setOpen] = useState(false);
   const sortProps = useSort<Article>();
+  const { push } = useHistory();
+
   const paginationProps = usePagination({ count: data.length });
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleClickAdd = () => push("/posts/add");
+  const handleClickUpdate = () => push(`/posts/slug`);
+
+  const getRowActions = (row: Article) => [
+    { onClick: () => push(`posts/${row.slug}`), icon: EditIcon, label: "Edit" },
+    { onClick: () => console.log("delete", row.slug), icon: DeleteIcon, label: "Delete" },
+    {
+      onClick: () => window.open(`https://www.google.com/${row.slug}`),
+      icon: VisibilityIcon,
+      label: "Visit",
+    },
+  ];
+
   return (
     <>
       <Table
@@ -99,14 +98,13 @@ export const Categories = ({ data }: { data: Article[] }) => {
         columns={columns}
         sortProps={sortProps}
         paginationProps={paginationProps}
+        getRowActions={getRowActions}
         toolbarProps={{
-          onCreate: handleOpen,
-          onEdit: handleOpen,
+          onCreate: handleClickAdd,
+          onEdit: handleClickUpdate,
         }}
       />
-      <PageDrawer open={open}>
-        <Form onClose={handleClose} title="Update Post" />
-      </PageDrawer>
+      <PostsForm />
     </>
   );
 };

@@ -8,6 +8,8 @@ import { StatusLabel } from "../../../enums/status.enum";
 import { Tag } from "../../../interfaces/tag.interface";
 import { TagTypeLabel } from "../../../enums/tagType.enum";
 import { Category } from "../../../interfaces/category.interface";
+import { PageDrawer } from "../../../layout/private/pageDrawer";
+import { Form } from "./form";
 
 const columns = [
   {
@@ -63,13 +65,18 @@ export const Tags = ({ data }: { data: Tag[] }) => {
   const handleOpen = () => setOpen(true);
 
   return (
-    <Table
-      rows={data}
-      title="Tags"
-      columns={columns}
-      toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
-      sortProps={sortProps}
-      paginationProps={paginationProps}
-    />
+    <>
+      <Table
+        rows={data}
+        title="Tags"
+        columns={columns}
+        toolbarProps={{ onCreate: handleOpen, onEdit: handleOpen }}
+        sortProps={sortProps}
+        paginationProps={paginationProps}
+      />
+      <PageDrawer open={open}>
+        <Form onClose={handleClose} title="Update Tag" />
+      </PageDrawer>
+    </>
   );
 };

@@ -1,41 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormStyles } from "./styles";
 import {
   Typography,
   FormControl,
   TextField,
   Button,
-  IconButton,
   ButtonBase,
   Divider,
+  MenuItem,
 } from "@material-ui/core";
 import { Article } from "../../../interfaces/post.interface";
 import { SelectAutocomplete } from "../../../theme/selectAutocomplete";
-import ArrowIcon from "@material-ui/icons/ArrowForwardIos";
 import SaveIcon from "@material-ui/icons/Save";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
-// import {Status} from "../../../enums/status.enum";
+import { Status, StatusLabel } from "../../../enums/status.enum";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-
-// content: string;
-// createdAt: Date;
-// id: string;
-// preview: string;
-// slug: string;
-// status: Status;
-// categories: Array<string>;
-// tags: Array<string>;
-// title: string;
-// updatedAt: Date;
 
 type PostsFormProps = {
   onClose: () => void;
   title: string;
+  post: Article | null;
+  categories: string[];
+  tags: string[];
+  onSubmit: (data: Partial<Article>) => void;
 };
 
-export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
+const statusList = Object.values(Status);
+
+enum Fields {
+  categories = "categories",
+  content = "content",
+  preview = "preview",
+  slug = "slug",
+  tags = "tags",
+  title = "title",
+  status = "status",
+}
+
+type FormData = {
+  [Fields.categories]: string[];
+  [Fields.content]: string;
+  [Fields.preview]: string;
+  [Fields.slug]: string;
+  [Fields.tags]: string[];
+  [Fields.title]: string;
+  [Fields.status]: Status;
+};
+
+const toFormData = (data: Article | null): FormData => {
+  return {
+    [Fields.categories]: data?.categories || [],
+    [Fields.content]: data?.content || "",
+    [Fields.preview]: data?.preview || "",
+    [Fields.slug]: data?.slug || "",
+    [Fields.status]: data?.status || Status.new,
+    [Fields.tags]: data?.tags || [],
+    [Fields.title]: data?.title || "",
+  };
+};
+
+export const Form: React.FC<PostsFormProps> = (props) => {
+  const { onClose, title, post, categories, tags, onSubmit } = props;
+  const [data, setData] = useState(toFormData(post));
+
+  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    setData((prev) => ({ ...prev, [target.name]: target.value }));
+  };
+
+  const onAutocompleteChange = ({ name, value }: { name: string; value: string[] }) => {
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    onSubmit(data);
+  };
+
   const classes = useFormStyles();
+  const formControlClasses = { root: classes.formControl };
+  const submitButtonClasses = { root: classes.submitButton };
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.toolbar}>
@@ -56,7 +99,7 @@ export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
             color="primary"
             variant="outlined"
             startIcon={<VisibilityIcon />}
-            classes={{ root: classes.submitButton }}
+            classes={submitButtonClasses}
           >
             preview
           </Button>
@@ -64,7 +107,8 @@ export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
             color="primary"
             variant="contained"
             startIcon={<SaveIcon />}
-            classes={{ root: classes.submitButton }}
+            classes={submitButtonClasses}
+            onClick={handleSave}
           >
             save
           </Button>
@@ -72,64 +116,97 @@ export const Form: React.FC<PostsFormProps> = ({ onClose, title }) => {
       </div>
       <div className={classes.formWrapper}>
         <form className={classes.form}>
-          <FormControl classes={{ root: classes.formControl }}>
+          <FormControl classes={formControlClasses}>
             <TextField
-              size="small"
-              select
-              variant="outlined"
-              label="Status"
               classes={{ root: classes.statusSelect }}
-            />
+              label="Status"
+              name={Fields.status}
+              onChange={onChange}
+              select
+              size="small"
+              value={data.status}
+              variant="outlined"
+            >
+              {statusList.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {StatusLabel[option]}
+                </MenuItem>
+              ))}
+            </TextField>
           </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
+          <FormControl classes={formControlClasses}>
             <TextField
-              fullWidth
               error={false}
-              variant="outlined"
-              label="Slug"
-              size="small"
-              required
+              fullWidth
               helperText={"The slug of post should be unique."}
+              label="Slug"
+              name={Fields.slug}
+              onChange={onChange}
+              required
+              size="small"
+              value={data.slug}
+              variant="outlined"
             />
           </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
+          <FormControl classes={formControlClasses}>
             <TextField
-              size="small"
               fullWidth
-              variant="outlined"
+              helperText={"Maximum 256 characters."}
               label="Title"
+              name={Fields.title}
+              onChange={onChange}
               required
-              helperText={"Maximum 256 characters."}
+              size="small"
+              value={data.title}
+              variant="outlined"
             />
           </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
+          <FormControl classes={formControlClasses}>
             <TextField
-              size="small"
-              multiline
               fullWidth
-              rowsMax={4}
-              variant="outlined"
+              helperText={"Maximum 256 characters."}
               label="Preview"
-              helperText={"Maximum 256 characters."}
-              required
-            />
-          </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
-            <TextField
-              size="small"
               multiline
-              fullWidth
-              variant="outlined"
-              rows={15}
-              label="Content"
+              name={Fields.preview}
+              onChange={onChange}
               required
+              rowsMax={4}
+              size="small"
+              value={data.preview}
+              variant="outlined"
             />
           </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
-            <SelectAutocomplete />
+          <FormControl classes={formControlClasses}>
+            <TextField
+              fullWidth
+              label="Content"
+              multiline
+              name={Fields.content}
+              onChange={onChange}
+              required
+              rows={15}
+              size="small"
+              value={data.content}
+              variant="outlined"
+            />
           </FormControl>
-          <FormControl classes={{ root: classes.formControl }}>
-            <SelectAutocomplete />
+          <FormControl classes={formControlClasses}>
+            <SelectAutocomplete
+              label="Categories"
+              name={Fields.categories}
+              onChange={onAutocompleteChange}
+              options={categories}
+              value={data.categories}
+            />
+          </FormControl>
+          <FormControl classes={formControlClasses}>
+            <SelectAutocomplete
+              label="Tags"
+              name={Fields.tags}
+              onChange={onAutocompleteChange}
+              options={tags}
+              value={data.tags}
+            />
           </FormControl>
         </form>
       </div>
