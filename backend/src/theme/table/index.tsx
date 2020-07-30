@@ -4,7 +4,7 @@ import { useStyles } from "./styles";
 import { TableToolbar, ToolbarProps } from "./toolbar";
 import { SortProps, TableHead } from "./header";
 import { useTable } from "./useTable";
-import { Row, Column, TableRow } from "./row";
+import { Row, Column, TableRow, GetRowActions } from "./row";
 import { PaginationProps, TablePagination } from "./pagination";
 
 export function Table<T extends Row>(props: {
@@ -13,11 +13,12 @@ export function Table<T extends Row>(props: {
   paginationProps: PaginationProps;
   sortProps: SortProps<T>;
   toolbarProps: ToolbarProps;
-  title: string
+  title: string;
+  getRowActions?: GetRowActions<T>;
 }) {
   const classes = useStyles();
 
-  const { paginationProps, sortProps, rows, columns, toolbarProps, title } = props;
+  const { paginationProps, sortProps, rows, columns, toolbarProps, title, getRowActions } = props;
 
   const { checkedList, isChecked, handleClick, handleCheckAll } = useTable({ rows });
 
@@ -43,6 +44,7 @@ export function Table<T extends Row>(props: {
               onCheck={handleCheckAll}
               rowsCnt={rows.length}
               sortProps={sortProps}
+              hasActions={getRowActions !== undefined}
             />
             <TableBody>
               {rows.map((row, idx) => {
@@ -58,6 +60,7 @@ export function Table<T extends Row>(props: {
                     labelId={labelId}
                     checked={checked}
                     handleClick={handleClick}
+                    getActions={getRowActions}
                   />
                 );
               })}

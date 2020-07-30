@@ -1,66 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { useStyles } from "./styles";
-import {
-  Checkbox,
-  TableCell,
-  TableRow as MuiTableRow,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@material-ui/core";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Checkbox, TableCell, TableRow as MuiTableRow } from "@material-ui/core";
+import { ActionColumn } from "./actions";
+import ThumbUpIcon from "@material-ui/icons/ThumbUpOutlined";
+
 export interface Column<T extends Row> {
   fieldName: keyof T;
   render?: (row: T) => React.ReactNode;
   title: string;
   key: string;
-  align?: "left" | "right";
+  align?: "left" | "center" | "right";
 }
+
+export type RowAction = { icon: typeof ThumbUpIcon; label: string; onClick: () => void };
+export type GetRowActions<T> = (row: T) => Array<RowAction>;
 
 export interface Row {
   id: string;
 }
-
-const MenuCell = () => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => setAnchorEl(null);
-
-  return (
-    <TableCell align="center" padding="checkbox">
-      <IconButton onClick={handleClick} style={{ width: 40, height: 40 }}>
-        <MoreHorizIcon />
-      </IconButton>
-      <Menu
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>
-          <EditIcon fontSize="small" color="action" />
-          <Typography style={{ marginLeft: 10, minWidth: 80 }}>Edit</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <DeleteIcon fontSize="small" color="action" />
-          <Typography style={{ marginLeft: 10, minWidth: 80 }}>Delete</Typography>
-        </MenuItem>
-      </Menu>
-    </TableCell>
-  );
-};
 
 export const TableRow = <T extends Row>({
   columns,
@@ -69,12 +26,14 @@ export const TableRow = <T extends Row>({
   checked,
   handleClick,
   classes,
+  getActions,
 }: {
   columns: Array<Column<T>>;
   row: T;
   labelId: string;
   checked: boolean;
   handleClick: (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => void;
+  getActions?: GetRowActions<T>;
   classes: ReturnType<typeof useStyles>;
 }) => {
   return (
@@ -102,7 +61,11 @@ export const TableRow = <T extends Row>({
           </TableCell>
         );
       })}
-      <MenuCell />
+      {getActions !== undefined ? (
+        <TableCell key="actions" id={labelId} scope="row" align="center">
+          <ActionColumn>{getActions(row) as RowAction[]}</ActionColumn>
+        </TableCell>
+      ) : null}
     </MuiTableRow>
   );
 };

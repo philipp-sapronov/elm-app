@@ -45,6 +45,7 @@ interface TableHeadProps<T extends Row> {
   rowsCnt: number;
   columns: Array<Column<T>>;
   sortProps: SortProps<T>;
+  hasActions: boolean;
 }
 
 export type SortProps<T> = {
@@ -55,7 +56,7 @@ export type SortProps<T> = {
 };
 
 export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
-  const { onCheck, sortProps, checkedCnt, rowsCnt, columns } = props;
+  const { onCheck, sortProps, checkedCnt, rowsCnt, columns, hasActions } = props;
   const { order, onSort, orderBy } = sortProps;
 
   const handleSort = (value: keyof T) => () => {
@@ -97,11 +98,13 @@ export const TableHead = <T extends Row>(props: TableHeadProps<T>) => {
             </TableCell>
           );
         })}
-        <TableCell style={{ fontSize: 14, fontWeight: 600 }} key="actions" align={"right"}>
-          <ButtonBase disableRipple disableTouchRipple style={{ fontSize: 14, fontWeight: 600 }}>
-            Actions
-          </ButtonBase>
-        </TableCell>
+        {hasActions ? (
+          <TableCell style={{ fontSize: 14, fontWeight: 600 }} key="actions" align="center">
+            <ButtonBase disableRipple disableTouchRipple style={{ fontSize: 14, fontWeight: 600 }}>
+              Actions
+            </ButtonBase>
+          </TableCell>
+        ) : null}
       </TableRow>
     </MuiTableHead>
   );
