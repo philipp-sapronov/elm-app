@@ -1,4 +1,4 @@
-import { ArticleStatus } from './enums';
+import { ArticleStatus } from "./enums";
 
 export interface IArticle {
   content: string;
@@ -7,6 +7,7 @@ export interface IArticle {
   preview: string;
   slug: string;
   status: ArticleStatus;
+  excerpt: string;
   categories: Array<string>;
   tags: Array<string>;
   title: string;

@@ -4,7 +4,7 @@ export class CreateArticleDto {
   content: string;
   slug: string;
   status: ArticleStatus;
-  summery: string;
+  excerpt: string;
   tags: Array<string>;
   title: string;
 }

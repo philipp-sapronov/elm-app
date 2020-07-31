@@ -24,7 +24,7 @@ export class ArticlesController {
     return await this.articlesService.create(data);
   }
 
-  @Put("update")
+  @Post("update")
   async update(@Body() data: UpdateArticleDto /* use validation pipe */): Promise<IArticle> {
     return await this.articlesService.update(data);
   }
