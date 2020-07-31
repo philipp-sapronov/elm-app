@@ -12,6 +12,6 @@ export class UpdateCategoryDto extends CreateCategoryDto {
   updatedAt: Date;
 }
 
-export class DeleteCategoryDto extends CreateCategoryDto {
+export class DeleteCategoryDto {
   id: string;
 }

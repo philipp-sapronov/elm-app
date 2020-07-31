@@ -1,4 +1,4 @@
-import { ArticleStatus } from './enums';
+import { ArticleStatus } from "./enums";
 export class CreateArticleDto {
   categories: Array<string>;
   content: string;
@@ -13,4 +13,8 @@ export class UpdateArticleDto extends CreateArticleDto {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export class DeleteArticleDto {
+  id: string;
 }

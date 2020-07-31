@@ -1,9 +1,10 @@
-import { CreateTagDto, UpdateTagDto } from './dto';
-import { TagsDbParams } from './schema';
-import { ITag } from './interface';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Document } from 'mongoose';
+import { Status } from "./../statuses/enums";
+import { CreateTagDto, UpdateTagDto, DeleteTagDto } from "./dto";
+import { TagsDbParams } from "./schema";
+import { ITag } from "./interface";
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, Document } from "mongoose";
 
 type TagDocument = Document & ITag;
 
@@ -28,7 +29,19 @@ export class TagsService {
     return await newTag.save();
   }
 
-  async update(data: UpdateTagDto) {}
-  async softDelete() {}
-  async delete() {}
+  async update(data: UpdateTagDto): Promise<ITag> {
+    return await this.tagsModel.findByIdAndUpdate(data._id, data, {
+      new: true
+    });
+  }
+
+  async delete(data: DeleteTagDto): Promise<ITag> {
+    return await this.tagsModel.findByIdAndUpdate(
+      data.id,
+      { status: Status.deleted },
+      {
+        new: true
+      }
+    );
+  }
 }
