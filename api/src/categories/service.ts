@@ -1,18 +1,20 @@
-import { CreateCategoryDto } from './dto';
-import { CategoryDbParams } from './schema';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Document } from 'mongoose';
-import { ICategory } from './interface';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, Document } from "mongoose";
+
+import { CreateCategoryDto, UpdateCategoryDto, DeleteCategoryDto } from "./dto";
+import { CategoryDbParams } from "./schema";
+import { ICategory } from "./interface";
+import { Status } from "../statuses/enums";
 
 type ArticleDocument = Document & ICategory;
 
 @Injectable()
 export class CategoryService {
   constructor(
-    @InjectModel(CategoryDbParams.name) private readonly categoriesModel: Model<ArticleDocument>,
+    @InjectModel(CategoryDbParams.name) private readonly categoriesModel: Model<ArticleDocument>
   ) {}
-  async findAll(): Promise<ICategory[]> {
+  async find(): Promise<ICategory[]> {
     return this.categoriesModel.find();
   }
 
@@ -26,9 +28,19 @@ export class CategoryService {
     return await newTag.save();
   }
 
-  // async findBy() {}
-  // async findOne() {}
-  // async update(data: UpdateArticleDto) {}
-  // async softDelete() {}
-  // async delete() {}
+  async update(data: UpdateCategoryDto): Promise<ICategory> {
+    return await this.categoriesModel.findByIdAndUpdate(data._id, data, {
+      new: true
+    });
+  }
+
+  async delete(data: DeleteCategoryDto): Promise<ICategory> {
+    return await this.categoriesModel.findByIdAndUpdate(
+      data.id,
+      { status: Status.deleted },
+      {
+        new: true
+      }
+    );
+  }
 }

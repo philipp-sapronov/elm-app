@@ -1,6 +1,9 @@
+import { Status } from "./../statuses/enums";
 export interface ICategory {
-  createdAt: Date;
   _id: string;
+  createdAt: Date;
+  description: string;
+  status: Status;
   title: string;
   updatedAt: Date;
 }

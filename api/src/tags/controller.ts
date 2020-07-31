@@ -1,9 +1,9 @@
-import { TagsService } from './service';
-import { CreateTagDto, UpdateTagDto } from './dto';
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { ITag } from './interface';
+import { TagsService } from "./service";
+import { CreateTagDto, UpdateTagDto } from "./dto";
+import { Controller, Get, Param, Post, Body } from "@nestjs/common";
+import { ITag } from "./interface";
 
-@Controller('tags')
+@Controller("tags")
 export class TagsController {
   constructor(private tagsService: TagsService) {}
 
@@ -12,22 +12,22 @@ export class TagsController {
     return this.tagsService.find();
   }
 
-  @Get(':id')
-  async getById(@Param('id') id: string): Promise<ITag> {
+  @Get(":id")
+  async getById(@Param("id") id: string): Promise<ITag> {
     return this.tagsService.findById(id);
   }
 
-  @Post('create')
+  @Post("add")
   async add(@Body() data: CreateTagDto /* use validation pipe */): Promise<ITag> {
     return await this.tagsService.create(data);
   }
 
-  @Post('update')
+  @Post("update")
   async update(@Body() data: UpdateTagDto /* use validation pipe */): Promise<ITag> {
     return {} as ITag;
   }
 
-  @Post('remove')
+  @Post("delete")
   async remove(@Body() data: { id: string } /* use validation pipe */): Promise<ITag> {
     return {} as ITag;
   }

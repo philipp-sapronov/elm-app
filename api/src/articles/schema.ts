@@ -1,8 +1,8 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
-import { TagsDbParams } from './../tags/schema';
-import { CategoryDbParams } from './../categories/schema';
-import { ArticleStatus } from './enums';
+import { TagsDbParams } from "./../tags/schema";
+import { CategoryDbParams } from "./../categories/schema";
+import { ArticleStatus } from "./enums";
 
 const { Types } = Schema;
 
@@ -14,23 +14,23 @@ export const ArticleSchema = new Schema(
     slug: {
       type: Types.String,
       required: true,
-      unique: true,
+      unique: true
     },
     status: {
       type: Types.String,
       default: ArticleStatus.new,
       enum: Object.values(ArticleStatus),
-      required: true,
+      required: true
     },
-    summery: { type: Types.String, required: true, trim: true },
+    excerpt: { type: Types.String, required: true, trim: true },
     tags: [{ type: Types.ObjectId, default: [], ref: TagsDbParams.name }],
-    title: { type: Types.String, required: true, trim: true },
+    title: { type: Types.String, required: true, trim: true }
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const ArticleDbParams = {
-  name: 'Article',
-  collection: 'articles',
-  schema: ArticleSchema,
+  name: "Article",
+  collection: "articles",
+  schema: ArticleSchema
 };

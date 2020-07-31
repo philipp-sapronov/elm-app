@@ -1,4 +1,4 @@
-export enum ArticleStatus {
+export enum Status {
   new = "10-new",
   draft = "20-draft",
   published = "30-published",
