@@ -10,27 +10,25 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { Article } from "../../../interfaces/post.interface";
-import { SelectAutocomplete } from "../../../theme/selectAutocomplete";
+import { SelectAutocomplete, AutocompleteOption } from "../../../theme/selectAutocomplete";
 import SaveIcon from "@material-ui/icons/Save";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { Status, StatusLabel } from "../../../enums/status.enum";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-type PostsFormProps = {
-  onClose: () => void;
-  title: string;
-  post: Article | null;
-  categories: string[];
-  tags: string[];
-  onSubmit: (data: Partial<Article>) => void;
-};
-
+// helper
 const statusList = Object.values(Status);
+const findById = (map: Record<string, AutocompleteOption>) => (id: string) => map[id];
+const toId = (item: AutocompleteOption) => item._id;
+const createMap = (array: AutocompleteOption[]) =>
+  array.reduce((acc, item) => {
+    return { ...acc, [item._id]: item };
+  }, {});
 
 enum Fields {
   categories = "categories",
   content = "content",
-  preview = "preview",
+  excerpt = "excerpt",
   slug = "slug",
   tags = "tags",
   title = "title",
@@ -38,41 +36,65 @@ enum Fields {
 }
 
 type FormData = {
-  [Fields.categories]: string[];
+  [Fields.categories]: AutocompleteOption[];
   [Fields.content]: string;
-  [Fields.preview]: string;
+  [Fields.excerpt]: string;
   [Fields.slug]: string;
-  [Fields.tags]: string[];
+  [Fields.tags]: AutocompleteOption[];
   [Fields.title]: string;
   [Fields.status]: Status;
 };
 
-const toFormData = (data: Article | null): FormData => {
+const toFormData = (
+  data: Article | null,
+  categories: AutocompleteOption[],
+  tags: AutocompleteOption[]
+): FormData => {
+  const categoriesMap = createMap(categories);
+  const tagsMap = createMap(tags);
+
   return {
-    [Fields.categories]: data?.categories || [],
+    [Fields.categories]: data?.categories?.map(findById(categoriesMap)) || [],
     [Fields.content]: data?.content || "",
-    [Fields.preview]: data?.preview || "",
+    [Fields.excerpt]: data?.excerpt || "",
     [Fields.slug]: data?.slug || "",
     [Fields.status]: data?.status || Status.new,
-    [Fields.tags]: data?.tags || [],
+    [Fields.tags]: data?.tags?.map(findById(tagsMap)) || [],
     [Fields.title]: data?.title || "",
   };
 };
 
+const toPost = (data: FormData) => {
+  return {
+    ...data,
+    categories: data.categories.map(toId),
+    tags: data.tags.map(toId),
+  };
+};
+
+type PostsFormProps = {
+  categories: AutocompleteOption[];
+  onClose: () => void;
+  onSubmit: (data: Partial<Article>) => void;
+  post: Article | null;
+  tags: AutocompleteOption[];
+  title: string;
+};
+
 export const Form: React.FC<PostsFormProps> = (props) => {
   const { onClose, title, post, categories, tags, onSubmit } = props;
-  const [data, setData] = useState(toFormData(post));
+  const [data, setData] = useState(toFormData(post, categories, tags));
 
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const onAutocompleteChange = ({ name, value }: { name: string; value: string[] }) => {
+  const onAutocompleteChange = ({ name, value }: { name: string; value: AutocompleteOption[] }) => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
-    onSubmit(data);
+    onSubmit(toPost(data));
   };
 
   const classes = useFormStyles();
@@ -101,7 +123,7 @@ export const Form: React.FC<PostsFormProps> = (props) => {
             startIcon={<VisibilityIcon />}
             classes={submitButtonClasses}
           >
-            preview
+            excerpt
           </Button>
           <Button
             color="primary"
@@ -165,14 +187,14 @@ export const Form: React.FC<PostsFormProps> = (props) => {
             <TextField
               fullWidth
               helperText={"Maximum 256 characters."}
-              label="Preview"
+              label="excerpt"
               multiline
-              name={Fields.preview}
+              name={Fields.excerpt}
               onChange={onChange}
               required
               rowsMax={4}
               size="small"
-              value={data.preview}
+              value={data.excerpt}
               variant="outlined"
             />
           </FormControl>

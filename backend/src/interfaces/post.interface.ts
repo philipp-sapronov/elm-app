@@ -5,7 +5,7 @@ export interface Article {
   content: string;
   createdAt: Date;
   _id: string;
-  preview: string;
+  excerpt: string;
   postedAt: Date;
   slug: string;
   status: Status;

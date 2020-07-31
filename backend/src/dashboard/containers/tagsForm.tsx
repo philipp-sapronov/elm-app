@@ -3,22 +3,11 @@ import { useParams } from "react-router";
 import { PageDrawer } from "../../layout/private/pageDrawer";
 import { Form } from "../components/tags/form";
 import { useHistory } from "react-router-dom";
-import { Status } from "../../enums/status.enum";
 import { Tag } from "../../interfaces/tag.interface";
+import * as thunks from "../thunks/tags";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/types";
 import { TagType } from "../../enums/tagType.enum";
-
-const getTag = (_: null, idx: number) => {
-  const id = Math.random().toFixed(4);
-  return {
-    _id: id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    title: "Tag" + idx,
-    type: TagType.technology,
-    description: "Short description about this tag",
-    status: Status.new,
-  };
-};
 
 export const TagForm = () => {
   const { slug } = useParams();
@@ -26,19 +15,24 @@ export const TagForm = () => {
 
   // get current item from store
   const isSlug = slug !== undefined;
+  const tags = useSelector((state: RootState) => state.dashboard.tags.data);
   const [tag, setTag] = useState<Tag | null>(null);
+  const dispatch = useDispatch();
 
   const handleClose = () => push("/tags");
 
   useEffect(() => {
     if (!isSlug || slug === "add") return setTag(null);
-    setTag(getTag(null, 1));
+    setTag(tags.find((item) => item.title === slug) || null);
   }, [slug]);
 
   const title = `${isSlug ? "Update" : "Add"} Tag`;
 
-  const handleSubmit = (data: Partial<Tag>) => {
-    console.log(data, "data");
+  const handleAdd = async (data: Partial<Tag>) => {
+    dispatch(thunks.add(data as Tag));
+  };
+  const handleUpdate = async (data: Partial<Tag>) => {
+    dispatch(thunks.update({ ...tag, ...data } as Tag));
   };
 
   return (
@@ -46,9 +40,9 @@ export const TagForm = () => {
       <Form
         onClose={handleClose}
         title={title}
-        tag={tag}
-        onSubmit={handleSubmit}
         tagTypes={Object.values(TagType)}
+        tag={tag}
+        onSubmit={tag === null ? handleAdd : handleUpdate}
       />
     </PageDrawer>
   );

@@ -15,6 +15,9 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
+import { useDispatch } from "react-redux";
+import * as thunks from "../../thunks/posts";
+
 const columns = [
   { fieldName: "title" as keyof Article, key: "title", title: "Title" },
   {
@@ -71,10 +74,20 @@ const columns = [
   },
 ];
 
-export const Categories = ({ data }: { data: Article[] }) => {
+export const Categories = ({
+  data,
+  loading,
+  error,
+}: {
+  data: Article[];
+  loading: boolean;
+  error: string | null;
+}) => {
   const sortProps = useSort<Article>();
   const { push } = useHistory();
+  const dispatch = useDispatch();
 
+  console.log(data, "DATAT");
   const paginationProps = usePagination({ count: data.length });
 
   const handleClickAdd = () => push("/posts/add");
@@ -82,7 +95,7 @@ export const Categories = ({ data }: { data: Article[] }) => {
 
   const getRowActions = (row: Article) => [
     { onClick: () => push(`posts/${row.slug}`), icon: EditIcon, label: "Edit" },
-    { onClick: () => console.log("delete", row.slug), icon: DeleteIcon, label: "Delete" },
+    { onClick: () => dispatch(thunks.remove(row._id)), icon: DeleteIcon, label: "Delete" },
     {
       onClick: () => window.open(`https://www.google.com/${row.slug}`),
       icon: VisibilityIcon,

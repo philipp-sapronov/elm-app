@@ -1,8 +1,10 @@
 import { categories } from "./categories";
 import { combineReducers } from "@reduxjs/toolkit";
-import articles from "./articles";
+import { posts } from "./posts";
+import { tags } from "./tags";
 
 export default combineReducers({
-  articles,
+  posts,
   categories,
+  tags,
 });

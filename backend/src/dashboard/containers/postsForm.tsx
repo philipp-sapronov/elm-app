@@ -4,53 +4,61 @@ import { PageDrawer } from "../../layout/private/pageDrawer";
 import { Form } from "../components/posts/form";
 import { useHistory } from "react-router-dom";
 import { Article } from "../../interfaces/post.interface";
-import { Status } from "../../enums/status.enum";
-const title = "What is Lorem Ipsum?";
+import * as thunks from "../thunks/posts";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/types";
+import * as categoriesThunks from "../thunks/categories";
+import * as tagsThunks from "../thunks/tags";
 
-const getPost = (_: null, idx: number): Article => {
-  const id = Math.random().toFixed(4);
-  return {
-    categories: [],
-    content: "content",
-    createdAt: new Date(),
-    _id: id,
-    preview: "preview",
-    slug: "what-is-loremipsum-" + idx,
-    status: Status.new,
-    tags: [],
-    title: title + " " + idx,
-    updatedAt: new Date(),
-    postedAt: new Date(),
-  };
-};
+// helper
+const toAutocompleteOption = (item: { _id: string; title: string }) => ({
+  _id: item._id,
+  label: item.title,
+});
 
 export const PostsForm = () => {
   const { slug } = useParams();
   const { push } = useHistory();
 
-  const handleClose = () => push("/posts");
   // get current item from store
   const isSlug = slug !== undefined;
+  const posts = useSelector((state: RootState) => state.dashboard.posts.data);
+  const tags = useSelector((state: RootState) => state.dashboard.tags.data);
+  const categories = useSelector((state: RootState) => state.dashboard.categories.data);
+
   const [post, setPost] = useState<Article | null>(null);
+  const dispatch = useDispatch();
+
+  const handleClose = () => push("/posts");
 
   useEffect(() => {
     if (!isSlug || slug === "add") return setPost(null);
-    setPost(getPost(null, 1));
+    setPost(posts.find((item) => item.slug === slug) || null);
   }, [slug]);
 
   const title = `${isSlug ? "Update" : "Add"} Post`;
-  const handleSubmit = () => {
-    //
+
+  useEffect(() => {
+    dispatch(tagsThunks.get());
+    dispatch(categoriesThunks.get());
+  }, []);
+
+  const handleAdd = async (data: Partial<Article>) => {
+    dispatch(thunks.add(data as Article));
   };
+  const handleUpdate = async (data: Partial<Article>) => {
+    dispatch(thunks.update({ ...post, ...data } as Article));
+  };
+
   return (
     <PageDrawer open={isSlug}>
       <Form
         onClose={handleClose}
         title={title}
         post={post}
-        categories={["first", "second", "third"]}
-        tags={["first", "second", "third"]}
-        onSubmit={handleSubmit}
+        categories={categories.map(toAutocompleteOption)}
+        tags={tags.map(toAutocompleteOption)}
+        onSubmit={post === null ? handleAdd : handleUpdate}
       />
     </PageDrawer>
   );

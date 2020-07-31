@@ -78,6 +78,7 @@ export const Form: React.FC<TagFormProps> = ({ onClose, title, tag, onSubmit, ta
         </div>
         <div className={classes.buttonsWrapper}>
           <Button
+            onClick={handleSave}
             color="primary"
             variant="contained"
             startIcon={<SaveIcon />}

@@ -10,7 +10,9 @@ import { StatusLabel } from "../../../enums/status.enum";
 import { Tag } from "../../../interfaces/tag.interface";
 import { TagTypeLabel } from "../../../enums/tagType.enum";
 import { Category } from "../../../interfaces/category.interface";
-import { TagForm } from "../../containers/tagForm";
+import { TagForm } from "../../containers/tagsForm";
+import { useDispatch } from "react-redux";
+import * as thunks from "../../thunks/tags";
 
 const columns = [
   {
@@ -56,8 +58,11 @@ const columns = [
   },
 ];
 
-export const Tags = ({ data }: { data: Tag[] }) => {
+export const Tags = ({ data }: { data: Tag[]; loading: boolean; error: string | null }) => {
   const sortProps = useSort<Tag>();
+  // todo: move dispatch to container and pass via props
+  const dispatch = useDispatch();
+
   const paginationProps = usePagination({ count: data.length });
   const { push } = useHistory();
 
@@ -67,9 +72,10 @@ export const Tags = ({ data }: { data: Tag[] }) => {
   const getRowActions = (row: Tag) => {
     return [
       { onClick: () => push(`tags/${row.title}`), icon: EditIcon, label: "Edit" },
-      { onClick: () => console.log("delete", row.title), icon: DeleteIcon, label: "Delete" },
+      { onClick: () => dispatch(thunks.remove(row._id)), icon: DeleteIcon, label: "Delete" },
     ];
   };
+
   return (
     <>
       <Table

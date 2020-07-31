@@ -1,23 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tags as View } from "../components/tags";
 import { Status } from "../../enums/status.enum";
-import { Tag } from "../../interfaces/tag.interface";
 import { TagType } from "../../enums/tagType.enum";
-
-const getTag = (_: null, idx: number) => {
-  const id = Math.random().toFixed(4);
-  return {
-    _id: id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    title: "Tag" + idx,
-    type: TagType.technology,
-    description: "Short description about this tag",
-    status: Status.new,
-  };
-};
+import * as thunks from "../thunks/tags";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/types";
 
 export const Tags = () => {
-  const data: Tag[] = new Array(10).fill(null).map(getTag);
-  return <View data={data} />;
+  const { data, error, loading } = useSelector((state: RootState) => state.dashboard.tags);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(thunks.get());
+  }, []);
+
+  return <View data={data} loading={loading} error={error} />;
 };
