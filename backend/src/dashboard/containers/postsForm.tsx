@@ -13,7 +13,7 @@ const getPost = (_: null, idx: number): Article => {
     categories: [],
     content: "content",
     createdAt: new Date(),
-    id,
+    _id: id,
     preview: "preview",
     slug: "what-is-loremipsum-" + idx,
     status: Status.new,

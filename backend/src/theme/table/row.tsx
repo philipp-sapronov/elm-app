@@ -16,7 +16,7 @@ export type RowAction = { icon: typeof ThumbUpIcon; label: string; onClick: () =
 export type GetRowActions<T> = (row: T) => Array<RowAction>;
 
 export interface Row {
-  id: string;
+  _id: string;
 }
 
 export const TableRow = <T extends Row>({
@@ -42,14 +42,14 @@ export const TableRow = <T extends Row>({
       role="checkbox"
       aria-checked={checked}
       tabIndex={-1}
-      key={row.id}
+      key={row._id}
       selected={checked}
       classes={{ selected: classes.rowSelected, root: classes.rowRoot }}
     >
       <TableCell padding="checkbox">
         <Checkbox
           checked={checked}
-          onChange={handleClick(row.id)}
+          onChange={handleClick(row._id)}
           inputProps={{ "aria-labelledby": labelId }}
           color="primary"
         />

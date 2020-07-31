@@ -11,6 +11,8 @@ import { useSort } from "../../../theme/table/useSort";
 import { usePagination } from "../../../theme/table/usePagination";
 import { Category } from "../../../interfaces/category.interface";
 import { StatusLabel } from "../../../enums/status.enum";
+import { useDispatch } from "react-redux";
+import * as thunks from "../../thunks/categories";
 
 const columns = [
   {
@@ -50,10 +52,16 @@ const columns = [
   },
 ];
 
-export const Categories = ({ data }: { data: Category[] }) => {
+export const Categories = ({
+  data,
+}: {
+  data: Category[];
+  error: string | null;
+  loading: boolean;
+}) => {
   const sortProps = useSort<Category>();
   const paginationProps = usePagination({ count: data.length });
-
+  const dispatch = useDispatch();
   const { push } = useHistory();
 
   const handleClickAdd = () => push("/categories/add");
@@ -62,7 +70,7 @@ export const Categories = ({ data }: { data: Category[] }) => {
   const getRowActions = (row: Category) => {
     return [
       { onClick: () => push(`categories/${row.title}`), icon: EditIcon, label: "Edit" },
-      { onClick: () => console.log("delete", row.title), icon: DeleteIcon, label: "Delete" },
+      { onClick: () => dispatch(thunks.remove(row._id)), icon: DeleteIcon, label: "Delete" },
     ];
   };
   return (

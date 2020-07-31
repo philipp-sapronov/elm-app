@@ -48,12 +48,12 @@ export function Table<T extends Row>(props: {
             />
             <TableBody>
               {rows.map((row, idx) => {
-                const checked = isChecked(row.id);
+                const checked = isChecked(row._id);
                 const labelId = `table-checkbox-${idx}`;
 
                 return (
                   <TableRow<T>
-                    key={row.id}
+                    key={row._id}
                     classes={classes}
                     row={row}
                     columns={columns}

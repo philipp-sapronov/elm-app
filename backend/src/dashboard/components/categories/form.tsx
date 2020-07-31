@@ -52,8 +52,10 @@ export const Form: React.FC<CategoryFormProps> = ({ onClose, title, category, on
   };
 
   const handleSave = () => {
+    console.log(data, "submit data");
     onSubmit(data);
   };
+
   const classes = useFormStyles();
   return (
     <div className={classes.wrapper}>

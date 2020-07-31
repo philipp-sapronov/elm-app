@@ -10,7 +10,7 @@ import { TagType } from "../../enums/tagType.enum";
 const getTag = (_: null, idx: number) => {
   const id = Math.random().toFixed(4);
   return {
-    id,
+    _id: id,
     createdAt: new Date(),
     updatedAt: new Date(),
     title: "Tag" + idx,

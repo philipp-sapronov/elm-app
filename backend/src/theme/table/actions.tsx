@@ -27,7 +27,7 @@ export const ActionColumn = ({ children }: Props) => {
       <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         {children.map(({ onClick, icon: Icon, label }) => {
           return (
-            <MenuItem onClick={onClick}>
+            <MenuItem key={label} onClick={onClick}>
               <Icon fontSize="small" color="action" />
               <Typography style={{ marginLeft: 10, minWidth: 80 }}>{label}</Typography>
             </MenuItem>

@@ -3,8 +3,8 @@ import { Status } from "../enums/status.enum";
 
 export interface Tag {
   createdAt: Date;
-  description: string,
-  id: string;
+  description: string;
+  _id: string;
   title: string;
   type: TagType;
   status: Status;

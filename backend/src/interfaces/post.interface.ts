@@ -4,7 +4,7 @@ export interface Article {
   categories: Array<string>;
   content: string;
   createdAt: Date;
-  id: string;
+  _id: string;
   preview: string;
   postedAt: Date;
   slug: string;
